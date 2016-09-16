@@ -7,7 +7,7 @@ import org.opencompare.api.java.value.*;
 /**
  * Created by gbecan on 02/02/15.
  * groupe 9
- * M1 MIAGE 
+ * M1 MIAGE 2016/2017
  */
 public class MyPCMPrinter implements PCMVisitor {
 
