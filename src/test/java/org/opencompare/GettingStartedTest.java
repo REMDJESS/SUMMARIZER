@@ -1,9 +1,10 @@
-package org.opencompare;
+ package org.opencompare;
 
 import org.junit.Test;
 import org.opencompare.api.java.*;
 import org.opencompare.api.java.impl.io.KMFJSONLoader;
 import org.opencompare.api.java.io.CSVExporter;
+import org.opencompare.api.java.io.HTMLExporter;
 import org.opencompare.api.java.io.PCMLoader;
 
 import java.io.File;
@@ -50,18 +51,29 @@ public class GettingStartedTest {
                     Value interpretation = cell.getInterpretation();
 
                     // Print the content of the cell
-                    System.out.println("(" + product.getKeyContent() + ", " + feature.getName() + ") = " + content);
+                    System.out.println("(" + product.getKeyContent() + ", " + feature.getName() + ") = " + content + " ---------- (rawContent: " + rawContent + "/// interpretation: " + interpretation + ")");
                 }
             }
 
             // Export the PCM container to CSV
-            CSVExporter csvExporter = new CSVExporter();
+            /*CSVExporter csvExporter = new CSVExporter();
             String csv = csvExporter.export(pcmContainer);
 
             // Write CSV content to file
             Path outputFile = Files.createTempFile("oc-", ".csv");
             Files.write(outputFile, csv.getBytes());
+            System.out.println("PCM exported to " + outputFile);*/
+            
+            
+            // Export the PCM container to HTML
+            HTMLExporter htmlExporter = new HTMLExporter();
+            String html = htmlExporter.export(pcmContainer);
+
+            // Write HTML content to file
+            Path outputFile = Files.createTempFile("oc-", ".html");
+            Files.write(outputFile, html.getBytes());
             System.out.println("PCM exported to " + outputFile);
+            
         }
 
     }
