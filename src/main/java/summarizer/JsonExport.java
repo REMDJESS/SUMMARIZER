@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+
 import org.opencompare.api.java.*;
 import org.opencompare.api.java.impl.io.KMFJSONLoader;
 import org.opencompare.api.java.io.PCMLoader;
@@ -35,27 +36,28 @@ public class JsonExport {
         List<PCMContainer> pcmContainers = loader.load(pcmFile);
         //Build a String
         StringBuilder builder = new StringBuilder();
-
+        
         for (PCMContainer pcmContainer : pcmContainers) {            
             // Get the PCM
             PCM pcm = pcmContainer.getPcm();            
             //Begin format
-            //.append("{ \n");
+            builder.append("{ \"produits\": [ \n");
             // Browse the cells of the PCM
             for (Product product : pcm.getProducts()) {
                 builder.append("{\"Produit\": \"").append(product.getKeyContent()).append("\", \n \"caracteristiques\" : [ \n");
                 for (Feature feature : pcm.getConcreteFeatures()) {
                     // Find the cell corresponding to the current feature and product
                     Cell cell = product.findCell(feature);
-                    String featureName = feature.getName().replaceAll("\"", "\'");
-                    String featureValue = cell.getContent();
+                    String featureName = feature.getName().replaceAll("(\")", "'");
+                    String featureValue = cell.getContent().replaceAll("(\")", "'");
+                    
                     builder.append("\t {\"caracteristique\": \"").append(featureName).append("\", \"valeur\": \"").append(featureValue).append("\"}, \n");
                 }
                 builder.deleteCharAt(builder.lastIndexOf(","));
                 builder.append("]}, \n");
             }
             builder.deleteCharAt(builder.lastIndexOf(","));
-            //builder.append("}");
+            builder.append("]}");
         }
         return builder.toString();
     }
