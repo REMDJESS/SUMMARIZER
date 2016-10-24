@@ -1,0 +1,53 @@
+{
+	"features": [
+		{ 
+			"nom": "caracteristique 1",
+			"type": "boolean",
+			"resume": {
+				"pourcentage_x": 80, 
+				"pourcentage_y": 10 
+			}
+		},
+		{ 
+			"nom": "caracteristique 1",
+			"type": "boolean",
+			"resume": {
+				"pourcentage_x": 80, 
+				"pourcentage_y": 10 
+			}
+		},
+		{ 
+			"nom": "caracteristique 1",
+			"type": "boolean",
+			"resume": {
+				"pourcentage_x": 80, 
+				"pourcentage_y": 10 
+			}
+		},
+		{ 
+			"nom": "caracteristique 2",
+			"type": "integer",
+			"resume": {
+				"pourcentage":{
+                                   "son": 50,
+                                   "sony": 50,
+                                   "sony": 50
+                                }, 
+				"moyenne": 4000,
+				"min": 45,
+				"max": 9000,
+				"ecartType": 500
+			}
+		},
+		{ 
+			"nom": "caracteristique 3",
+			"type": "String",
+			"resume": {
+				"element":"sony", 
+                            "pourcentage_element": 80,
+				"element": "nokia", 
+				"pourcentage": 20
+			}
+		}
+	]
+}
