@@ -8,25 +8,18 @@ package summarizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import org.opencompare.api.java.Cell;
-import org.opencompare.api.java.value.StringValue;
 
 /**
- *
+ * Permet de filtrer une collection de "Cell" et de constituer des sous-collection de chaque type de données possible 
  * @author NOYAF-PC
  */
 public class FiltreImpl implements Filtre {
-    
-    private Collection<Cell> data;
-    
-    public FiltreImpl(Collection<Cell> data){
-        this.data = data;
-    }
     
     /**
      * Retourne une liste de nombres (float) à partir d'une liste
      * @return 
      */
-    public Collection<Float> getNumberValues(){
+    public Collection<Float> getNumberValues(Collection<Cell> data){
         Collection<Float> filtre = new ArrayList<>();
         for(Cell c: data){
             if(c.getInterpretation().toString().contains("IntegerValue") || c.getInterpretation().toString().contains("RealValue")){
@@ -40,7 +33,7 @@ public class FiltreImpl implements Filtre {
      * Retourne une liste de chaines de caractères à partir d'une liste
      * @return 
      */
-    public Collection getStringValues(){
+    public Collection getStringValues(Collection<Cell> data){
         Collection filtre = new ArrayList<>();
         for(Cell c: data){
             if(c.getInterpretation().toString().contains("StringValue")){ 
@@ -54,7 +47,7 @@ public class FiltreImpl implements Filtre {
      * Retourne une liste de valeures booleennes à partir d'une liste
      * @return 
      */
-    public Collection getBooleanValues(){
+    public Collection getBooleanValues(Collection<Cell> data){
         Collection filtre = new ArrayList<>();
         for(Cell c: data){
             if(c.getInterpretation().toString().contains("BooleanValue")){ 
@@ -68,7 +61,7 @@ public class FiltreImpl implements Filtre {
      * Retourne une liste de valeures conditionnelles à partir d'une liste
      * @return 
      */
-    public Collection getConditionalValues(){
+    public Collection getConditionalValues(Collection<Cell> data){
         Collection filtre = new ArrayList<>();
         for(Cell c: data){
             if(c.getInterpretation().toString().contains("Conditional")){ 
@@ -82,7 +75,7 @@ public class FiltreImpl implements Filtre {
      * Retourne une liste de valeurs non définies à partir d'une liste
      * @return 
      */
-    public Collection getNotAvailableValues(){
+    public Collection getNotAvailableValues(Collection<Cell> data){
         Collection filtre = new ArrayList<>();
         for(Cell c: data){
             if(c.getInterpretation().toString().contains("NotAvailable")){ 
@@ -96,7 +89,7 @@ public class FiltreImpl implements Filtre {
      * Retourne une liste de date à partir d'une liste
      * @return 
      */
-    public Collection getDateValues(){
+    public Collection getDateValues(Collection<Cell> data){
         Collection filtre = new ArrayList<>();
         for(Cell c: data){
             if(c.getInterpretation().toString().contains("DateValues")){ 
@@ -110,7 +103,7 @@ public class FiltreImpl implements Filtre {
      * Retourne une liste de dimension à partir d'une liste
      * @return 
      */
-    public Collection getDimensionValues(){
+    public Collection getDimensionValues(Collection<Cell> data){
         Collection filtre = new ArrayList<>();
         for(Cell c: data){
             if(c.getInterpretation().toString().contains("Dimension")){ 
@@ -124,7 +117,7 @@ public class FiltreImpl implements Filtre {
      * Retourne une liste de valeurs non applicable à partir d'une liste
      * @return 
      */
-    public Collection getNotApplicableValues(){
+    public Collection getNotApplicableValues(Collection<Cell> data){
         Collection filtre = new ArrayList<>();
         for(Cell c: data){
             if(c.getInterpretation().toString().contains("NotApplicable")){ 
@@ -138,7 +131,7 @@ public class FiltreImpl implements Filtre {
      * Retourne une liste de partial à partir d'une liste
      * @return 
      */
-    public Collection getPartialValues(){
+    public Collection getPartialValues(Collection<Cell> data){
         Collection filtre = new ArrayList<>();
         for(Cell c: data){
             if(c.getInterpretation().toString().contains("Partial")){ 
@@ -152,7 +145,7 @@ public class FiltreImpl implements Filtre {
      * Retourne une liste de unit à partir d'une liste
      * @return 
      */
-    public Collection getUnitValues(){
+    public Collection getUnitValues(Collection<Cell> data){
         Collection filtre = new ArrayList<>();
         for(Cell c: data){
             if(c.getInterpretation().toString().contains("Unit")){ 
@@ -166,7 +159,7 @@ public class FiltreImpl implements Filtre {
      * Retourne une liste de version à partir d'une liste
      * @return 
      */
-    public Collection getVersionValues(){
+    public Collection getVersionValues(Collection<Cell> data){
         Collection filtre = new ArrayList<>();
         for(Cell c: data){
             if(c.getInterpretation().toString().contains("Version")){ 
@@ -180,7 +173,7 @@ public class FiltreImpl implements Filtre {
      * Retourne une liste de multiple à partir d'une liste
      * @return 
      */
-    public Collection getMultipleValues(){
+    public Collection getMultipleValues(Collection<Cell> data){
         Collection filtre = new ArrayList<>();
         for(Cell c: data){
             if(c.getInterpretation().toString().contains("Multiple")){ 

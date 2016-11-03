@@ -6,6 +6,7 @@
 package summarizer;
 
 import java.util.Collection;
+import org.opencompare.api.java.Cell;
 
 /**
  *
@@ -14,75 +15,75 @@ import java.util.Collection;
 public interface Filtre {
     
     /**
-     * Retourne une liste de nombres (float) à partir d'une liste
+     * Retourne une collection de nombres (float) à partir d'une collection
      * @return 
      */
-    public Collection<Float> getNumberValues();
+    public Collection<Float> getNumberValues(Collection<Cell> data);
 
     /**
-     * Retourne une liste de chaines de caractères à partir d'une liste
+     * Retourne une collection de chaines de caractères à partir d'une collection
      * @return 
      */
-    public Collection getStringValues();
+    public Collection getStringValues(Collection<Cell> data);
     
     /**
-     * Retourne une liste de valeures booleennes à partir d'une liste
+     * Retourne une collection de valeures booleennes à partir d'une collection
      * @return 
      */
-    public Collection getBooleanValues();
+    public Collection getBooleanValues(Collection<Cell> data);
     
     /**
-     * Retourne une liste de valeures conditionnelles à partir d'une liste
+     * Retourne une collection de valeures conditionnelles à partir d'une collection
      * @return 
      */
-    public Collection getConditionalValues();
+    public Collection getConditionalValues(Collection<Cell> data);
 
     /**
-     * Retourne une liste de valeurs non définies à partir d'une liste
+     * Retourne une collection de valeurs non définies à partir d'une collection
      * @return 
      */
-    public Collection getNotAvailableValues();
+    public Collection getNotAvailableValues(Collection<Cell> data);
     
     /**
-     * Retourne une liste de date à partir d'une liste
+     * Retourne une collection de date à partir d'une collection
      * @return 
      */
-    public Collection getDateValues();
+    public Collection getDateValues(Collection<Cell> data);
     
     /**
-     * Retourne une liste de dimension à partir d'une liste
+     * Retourne une collection de dimension à partir d'une collection
      * @return 
      */
-    public Collection getDimensionValues();
+    public Collection getDimensionValues(Collection<Cell> data);
     
     /**
-     * Retourne une liste de valeurs non applicable à partir d'une liste
+     * Retourne une collection de valeurs non applicable à partir d'une collection
      * @return 
      */
-    public Collection getNotApplicableValues();
+    public Collection getNotApplicableValues(Collection<Cell> data);
     
     /**
-     * Retourne une liste de partial à partir d'une liste
+     * Retourne une collection de partial à partir d'une collection
      * @return 
      */
-    public Collection getPartialValues();
+    public Collection getPartialValues(Collection<Cell> data);
 
     /**
-     * Retourne une liste de unit à partir d'une liste
+     * Retourne une collection de unit à partir d'une collection
      * @return 
      */
-    public Collection getUnitValues();
+    public Collection getUnitValues(Collection<Cell> data);
 
     /**
-     * Retourne une liste de version à partir d'une liste
+     * Retourne une collection de version à partir d'une collection
      * @return 
      */
-    public Collection getVersionValues();
+    public Collection getVersionValues(Collection<Cell> data);
 
     /**
-     * Retourne une liste de multiple à partir d'une liste
+     * Retourne une collection de multiple à partir d'une collection
      * @return 
      */
-    public Collection getMultipleValues();
+    public Collection getMultipleValues(Collection<Cell> data);
     
 }
