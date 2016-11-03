@@ -126,11 +126,11 @@ public class Main {
         List<PCMContainer> pcmContainers = loader.load(pcmFile);        
         PCM pcm = pcmContainers.get(0).getPcm(); //Récupère le PCM
         
-        Motif motif = new Motif(); //Instanciation d'un objet contenant l'ensemble des motifs
+        MotifImpl motif = new MotifImpl(); //Instanciation d'un objet contenant l'ensemble des motifs
         
         for(Feature feature: pcm.getConcreteFeatures()){
             List<Cell> cells = feature.getCells(); //Récupère l'ensemble des cellules de ce feature
-            Filtre filtre = new Filtre(cells);
+            FiltreImpl filtre = new FiltreImpl(cells);
                         
             /*Définition des sous ensembles par type */
             Collection filtreString = filtre.getStringValues();
