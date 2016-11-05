@@ -179,7 +179,7 @@ public class Regle {
             float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
 
             builder.append("{\"type\": \"").append(nomSousDomaine).append("\",");
-            builder.append("\"porcentageType\": ").append(pourcentageSousDomaine).append(",");             
+            builder.append("\"porcentageType\": ").append(pourcentageSousDomaine);             
             builder.append("},");
 
             return builder.toString();
