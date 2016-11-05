@@ -35,13 +35,14 @@ public class Regle {
      * du porcentage de chaque item (distinct), 
      * du maximum/minimum des pourcentages et les items correspondant
      * @param sousDomaine
-     * @return Objet json au format
+     * @param nomSousDomaine
+     * @return Objet json
      */
-    public String StringRule(Collection sousDomaine){        
+    public String StringRule(Collection sousDomaine, String nomSousDomaine){        
         if(sousDomaine.size() > 0){
-            float pourcentageSousDomaine = (tailleDomaine / sousDomaine.size()) * 100;
+            float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
 
-            builder.append("{\"type\": \"String\",");
+            builder.append("{\"type\": \"").append(nomSousDomaine).append("\",");
             builder.append("\"porcentageType\": ").append(pourcentageSousDomaine).append(",");
             builder.append("\"resume\": {");                
 
@@ -49,6 +50,7 @@ public class Regle {
             Map<String, Float> pourcentages = motif.pourcentage(sousDomaine);
             builder.append("\"pourcentage\": {");
             for(String key: pourcentages.keySet()){
+                key = key.replace("\"", "\\\"");
                 builder.append("\"").append(key).append("\": ").append(pourcentages.get(key)).append(",");
             }
             builder.deleteCharAt(builder.lastIndexOf(","));
@@ -59,16 +61,20 @@ public class Regle {
             if(max != min){
                 builder.append("\"max\": {");
                 for(String key: pourcentages.keySet()){
-                    if(pourcentages.get(key) == max)
+                    if(pourcentages.get(key) == max){
+                        key = key.replace("\"", "\\\"");
                         builder.append("\"").append(key).append("\": ").append(max).append(",");
+                    }
                 }
                 builder.deleteCharAt(builder.lastIndexOf(","));
                 builder.append("},");
 
                 builder.append("\"min\": {");
                 for(String key: pourcentages.keySet()){
-                    if(pourcentages.get(key) == min)
+                    if(pourcentages.get(key) == min){
+                        key = key.replace("\"", "\\\"");
                         builder.append("\"").append(key).append("\": ").append(min).append(",");
+                    }
                 }
                 builder.deleteCharAt(builder.lastIndexOf(","));
                 builder.append("},");
@@ -92,18 +98,19 @@ public class Regle {
      * du maximum/minimum
      * de l'écart type
      * @param sousDomaine
-     * @return Objet json au format
+     * @param nomSousDomaine
+     * @return Objet json
      */
-    public String numberRule(Collection sousDomaine){
+    public String numberRule(Collection sousDomaine, String nomSousDomaine){
         if(sousDomaine.size() > 0){
-            float pourcentageSousDomaine = (tailleDomaine / sousDomaine.size()) * 100;
+            float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
 
             float moyenne = motif.moyenne(sousDomaine); //Calcul de la moyenne
             float max = motif.max(sousDomaine); //Calcul du maximum
             float min = motif.min(sousDomaine); //Calcul du minimum
             float ecartType = motif.ecartType(sousDomaine); //Calcul de l'écart type
 
-            builder.append("{\"type\": \"Number\",");
+            builder.append("{\"type\": \"").append(nomSousDomaine).append("\",");
             builder.append("\"porcentageType\": ").append(pourcentageSousDomaine).append(",");
             builder.append("\"resume\": {");
 
@@ -127,13 +134,14 @@ public class Regle {
      * du pourcentage des items du sous domaine dans le domaine
      * du porcentage de chaque item (distinct)
      * @param sousDomaine
-     * @return Objet json au format
+     * @param nomSousDomaine
+     * @return Objet json
      */
-    public String booleanRule(Collection sousDomaine){
+    public String booleanRule(Collection sousDomaine, String nomSousDomaine){
         if(sousDomaine.size() > 0){
-            float pourcentageSousDomaine = (tailleDomaine / sousDomaine.size()) * 100;
+            float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
 
-            builder.append("{\"type\": \"Boolean\",");
+            builder.append("{\"type\": \"").append(nomSousDomaine).append("\",");
             builder.append("\"porcentageType\": ").append(pourcentageSousDomaine).append(",");
             builder.append("\"resume\": {");                
 
@@ -141,6 +149,7 @@ public class Regle {
             Map<String, Float> pourcentages = motif.pourcentage(sousDomaine);
             builder.append("\"pourcentage\": {");
             for(String key: pourcentages.keySet()){
+                key = key.replace("\"", "\\\"");
                 builder.append("\"").append(key).append("\": ").append(pourcentages.get(key)).append(",");
             }
             builder.deleteCharAt(builder.lastIndexOf(","));
@@ -160,13 +169,14 @@ public class Regle {
      * Le resumé etant constitué 
      * du pourcentage des items du sous domaine dans le domaine
      * @param sousDomaine
-     * @return Objet json au format
+     * @param nomSousDomaine
+     * @return Objet json
      */
-    public String notApplicableRule(Collection sousDomaine){
+    public String notApplicableRule(Collection sousDomaine, String nomSousDomaine){
         if(sousDomaine.size() > 0){
-            float pourcentageSousDomaine = (tailleDomaine / sousDomaine.size()) * 100;
+            float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
 
-            builder.append("{\"type\": \"NotAvailable\",");
+            builder.append("{\"type\": \"").append(nomSousDomaine).append("\",");
             builder.append("\"porcentageType\": ").append(pourcentageSousDomaine).append(",");             
             builder.append("},");
 
