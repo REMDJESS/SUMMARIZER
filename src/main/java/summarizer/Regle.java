@@ -14,7 +14,6 @@ import java.util.Map;
  */
 public class Regle {
     
-    StringBuilder builder;
     Motif motif;
     float tailleDomaine;
     
@@ -24,7 +23,6 @@ public class Regle {
      */
     public Regle(Collection domaine){
         motif = new MotifImpl();
-        builder = new StringBuilder();
         tailleDomaine = domaine.size();
     }
     
@@ -40,6 +38,7 @@ public class Regle {
      */
     public String StringRule(Collection sousDomaine, String nomSousDomaine){        
         if(sousDomaine.size() > 0){
+            StringBuilder builder = new StringBuilder();
             float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
 
             builder.append("{\"type\": \"").append(nomSousDomaine).append("\",");
@@ -103,6 +102,7 @@ public class Regle {
      */
     public String numberRule(Collection sousDomaine, String nomSousDomaine){
         if(sousDomaine.size() > 0){
+            StringBuilder builder = new StringBuilder();
             float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
 
             float moyenne = motif.moyenne(sousDomaine); //Calcul de la moyenne
@@ -139,6 +139,7 @@ public class Regle {
      */
     public String booleanRule(Collection sousDomaine, String nomSousDomaine){
         if(sousDomaine.size() > 0){
+            StringBuilder builder = new StringBuilder();
             float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
 
             builder.append("{\"type\": \"").append(nomSousDomaine).append("\",");
@@ -174,6 +175,7 @@ public class Regle {
      */
     public String notApplicableRule(Collection sousDomaine, String nomSousDomaine){
         if(sousDomaine.size() > 0){
+            StringBuilder builder = new StringBuilder();
             float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
 
             builder.append("{\"type\": \"").append(nomSousDomaine).append("\",");
