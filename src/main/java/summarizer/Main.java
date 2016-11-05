@@ -24,21 +24,11 @@ import java.util.List;
  */
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // Define a file representing a PCM to load
         File pcmFile = new File("pcms/example.pcm");
         //File pcmFile = new File("pcms/model/Comparison_of_Macintosh_models_1.pcm");
         
-        try{
-            testMotif(pcmFile);
-            
-        }
-        catch(Exception ex){
-            
-        }
-    }
-    
-    public static void testMotif(File pcmFile) throws IOException {
         PCMLoader loader = new KMFJSONLoader();
         List<PCMContainer> pcmContainers = loader.load(pcmFile);        
         PCM pcm = pcmContainers.get(0).getPcm(); //Récupère le PCM
@@ -69,12 +59,10 @@ public class Main {
             builder.append(regle.StringRule(filtre.getPartialValues(cells), "Partial"));
             builder.append(regle.StringRule(filtre.getUnitValues(cells), "Unit"));
             builder.append(regle.StringRule(filtre.getVersionValues(cells), "Version"));
-            builder.append(regle.notApplicableRule(filtre.getNotAvailableValues(cells), "NotAvailable"));
+            builder.append(regle.notApplicableRule(filtre.getNotAvailableValues(cells), "NotAvailable"));            
             
             builder.deleteCharAt(builder.lastIndexOf(","));
-            builder.append("]"); //EndTypes
-            
-            builder.deleteCharAt(builder.lastIndexOf(","));
+            builder.append("]"); //EndTypes            
             builder.append("},"); //EndFeature
         }
         builder.deleteCharAt(builder.lastIndexOf(","));
@@ -87,7 +75,5 @@ public class Main {
         Path outputFile = Files.createTempFile("oc-", ".json");
         Files.write(outputFile, jsonString.getBytes());
         System.out.println("PCM exported to " + outputFile);     
-        
-    }
-    
+    }    
 }
