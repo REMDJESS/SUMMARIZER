@@ -70,6 +70,11 @@ public class RegleTest {
     public void tearDown() {
     }
     
+    /**
+     * Effectue le test avec
+     * 1 - Une collection constitué de string,
+     * 2 - Une collection vide
+     */
     @Test
     public void StringRuleTest(){
         sousDomaine = new ArrayList();
@@ -83,7 +88,7 @@ public class RegleTest {
         StringBuilder builder = new StringBuilder();
         builder.append("{");
             builder.append("\"type\": \"String\",");
-            builder.append("\"porcentageType\": ").append(333.3333).append(",");
+            builder.append("\"porcentageType\": ").append(33.3333).append(",");
             builder.append("\"resume\": {");
                 builder.append("\"pourcentage\": {");
                     builder.append("\"a\": ").append(16.666668).append(",");
@@ -95,8 +100,13 @@ public class RegleTest {
                 builder.append("}");
             builder.append("}");
         builder.append("},");        
-        assertEquals("Sous domaine de chaine de caractère", builder.toString(), regle.StringRule(sousDomaine));
+        assertEquals("Sous domaine de chaine de caractère", builder.toString(), regle.StringRule(sousDomaine, "String"));
         
+        //----------------------------------------------------------------------
+        
+        sousDomaine = new ArrayList();
+        builder = new StringBuilder();
+        assertEquals("Sous domaine vide", builder.toString(), regle.StringRule(sousDomaine, "String"));
         
     }
 
