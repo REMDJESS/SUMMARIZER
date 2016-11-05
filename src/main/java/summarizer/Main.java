@@ -15,9 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -28,8 +26,8 @@ public class Main {
 
     public static void main(String[] args) {
         // Define a file representing a PCM to load
-        //File pcmFile = new File("pcms/example.pcm");
-        File pcmFile = new File("pcms/model/Comparison_of_Macintosh_models_1.pcm");
+        File pcmFile = new File("pcms/example.pcm");
+        //File pcmFile = new File("pcms/model/Comparison_of_Macintosh_models_1.pcm");
         
         try{
             testMotif(pcmFile);
@@ -55,37 +53,23 @@ public class Main {
             Filtre filtre = new FiltreImpl();
             Regle regle = new Regle(cells);
                         
-            /*Définition des sous-domaines */
-            Collection filtreString = filtre.getStringValues(cells);
-            Collection filtreNumber = filtre.getNumberValues(cells);
-            Collection filtreBoolean = filtre.getBooleanValues(cells);
-            Collection filtreConditional = filtre.getConditionalValues(cells);
-            Collection filtreDate = filtre.getDateValues(cells);
-            Collection filtreDimension = filtre.getDimensionValues(cells);
-            Collection filtreMultiple = filtre.getMultipleValues(cells);
-            Collection filtreNotApplicable = filtre.getNotApplicableValues(cells);
-            Collection filtrePartial = filtre.getPartialValues(cells);
-            Collection filtreUnit = filtre.getUnitValues(cells);
-            Collection filtreVersion = filtre.getVersionValues(cells);
-            Collection filtreNotAvailable = filtre.getNotAvailableValues(cells);
-            
             //Construction du feature
             builder.append("{\"nom\": \"").append(feature.getName()).append("\",");
             builder.append("\"types\": [ ");
             
             //Construnction des types du feature
-            builder.append(regle.StringRule(filtreString));
-            builder.append(regle.numberRule(filtreNumber));
-            builder.append(regle.booleanRule(filtreBoolean));
-            builder.append(regle.StringRule(filtreConditional));
-            builder.append(regle.StringRule(filtreDate));
-            builder.append(regle.StringRule(filtreDimension));
-            builder.append(regle.StringRule(filtreMultiple));
-            builder.append(regle.StringRule(filtreNotApplicable));
-            builder.append(regle.StringRule(filtrePartial));
-            builder.append(regle.StringRule(filtreUnit));
-            builder.append(regle.StringRule(filtreVersion));
-            builder.append(regle.notApplicableRule(filtreNotAvailable));
+            builder.append(regle.StringRule(filtre.getStringValues(cells), "String"));
+            builder.append(regle.numberRule(filtre.getNumberValues(cells), "Number"));
+            builder.append(regle.booleanRule(filtre.getBooleanValues(cells), "Boolean"));
+            builder.append(regle.StringRule(filtre.getConditionalValues(cells), "Conditional"));
+            builder.append(regle.StringRule(filtre.getDateValues(cells), "Date"));
+            builder.append(regle.StringRule(filtre.getDimensionValues(cells), "Dimension"));
+            builder.append(regle.StringRule(filtre.getMultipleValues(cells), "Multiple"));
+            builder.append(regle.StringRule(filtre.getNotApplicableValues(cells), "NotApplicable"));
+            builder.append(regle.StringRule(filtre.getPartialValues(cells), "Partial"));
+            builder.append(regle.StringRule(filtre.getUnitValues(cells), "Unit"));
+            builder.append(regle.StringRule(filtre.getVersionValues(cells), "Version"));
+            builder.append(regle.notApplicableRule(filtre.getNotAvailableValues(cells), "NotAvailable"));
             
             builder.deleteCharAt(builder.lastIndexOf(","));
             builder.append("]"); //EndTypes
