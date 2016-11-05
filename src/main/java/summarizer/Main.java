@@ -25,7 +25,7 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        // Define a file representing a PCM to load
+        // Définition du chemein d'accès au fichier pcm à manipuler
         File pcmFile = new File("pcms/example.pcm");
         //File pcmFile = new File("pcms/model/Comparison_of_Macintosh_models_1.pcm");
         
