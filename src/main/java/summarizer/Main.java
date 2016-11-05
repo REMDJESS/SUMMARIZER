@@ -7,12 +7,16 @@ package summarizer;
 
 //import org.opencompare.MyPCMPrinter;
 
+import java.io.BufferedOutputStream;
 import org.opencompare.api.java.*;
 import org.opencompare.api.java.impl.io.KMFJSONLoader;
 import org.opencompare.api.java.io.PCMLoader;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -25,7 +29,7 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        // Définition du chemein d'accès au fichier pcm à manipuler
+        // Définition du chemin d'accès au fichier pcm à manipuler
         File pcmFile = new File("pcms/example.pcm");
         //File pcmFile = new File("pcms/model/Comparison_of_Macintosh_models_1.pcm");
         
@@ -66,14 +70,33 @@ public class Main {
             builder.append("},"); //EndFeature
         }
         builder.deleteCharAt(builder.lastIndexOf(","));
-        builder.append("]}"); //EndFeatures        
-        
-        //Configuration de l'exportation
+        builder.append("]}"); //EndFeatures 
         String jsonString =builder.toString();
+
+        
+        /**** Export *****/
+        File resumeFile = new File("src/main/java/IHM/public_html/json/summarizer.json"); //fichier cible
+        sauvegarder(jsonString, resumeFile);
+        
         // Write JSON content to file
-        //Path outputFile = File.createTempFile("oc-", ".json", newFile);
-        Path outputFile = Files.createTempFile("oc-", ".json");
+        /*Path outputFile = Files.createTempFile("oc-", ".json");
         Files.write(outputFile, jsonString.getBytes());
-        System.out.println("PCM exported to " + outputFile);     
+        System.out.println("PCM exported to " + outputFile); */    
     }    
+    
+    public static void sauvegarder(String data, File cible) throws IOException{
+        ObjectOutputStream oos;
+        try{
+            oos = new ObjectOutputStream(
+                    new BufferedOutputStream(
+                      new FileOutputStream(cible)));
+
+            //Ecriture des données dans le fichier cible
+            oos.writeObject(data);
+            //Fermeture du flux !
+            oos.close();
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+        }
+    }
 }
