@@ -80,6 +80,8 @@ public class Main {
         /**** Export *****/
         File resumeFile = new File("src/main/java/IHM/public_html/json/summarizer.json"); //fichier cible
         sauvegarder(jsonString, resumeFile);
+        System.out.println("Resumé généré ! \nVeuillez ouvrir le fichier à l'emplacement suivant:");
+        System.out.println("src/main/java/IHM/public_html/index.htmlpcms/example.pcm");
                 
     }    
     
