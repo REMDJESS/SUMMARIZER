@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.Scanner;
 
 
 /**
@@ -24,8 +25,16 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        
+        
+        //Recupération du PCM fourni par l'utilisateur
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Veuillez saisir le chemin d'acces a votre .pcm (ex: pcms/example.pcm) : ");
+        String fichier = sc.nextLine();
+        File pcmFile = new File(fichier);
+        
         // Définition du chemin d'accès au fichier pcm à manipuler
-        File pcmFile = new File("pcms/example.pcm");
+        //File pcmFile = new File("pcms/example.pcm");
         //File pcmFile = new File("pcms/model/Comparison_of_Macintosh_models_1.pcm");
         
         PCMLoader loader = new KMFJSONLoader();
@@ -71,7 +80,7 @@ public class Main {
         /**** Export *****/
         File resumeFile = new File("src/main/java/IHM/public_html/json/summarizer.json"); //fichier cible
         sauvegarder(jsonString, resumeFile);
-        
+                
     }    
     
     public static void sauvegarder(String data, File outputFile) throws IOException{
@@ -80,4 +89,5 @@ public class Main {
         fw.write(data);
         fw.close();
     }
+    
 }

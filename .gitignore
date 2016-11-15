@@ -9,3 +9,4 @@ buildNumber.properties
 .idea/
 *.iml
 pcms/
+src/main/java/IHM/public_html/json/summarizer.json
