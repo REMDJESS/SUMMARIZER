@@ -24,8 +24,7 @@ import java.util.Scanner;
  */
 public class Main {
 
-    public static void main(String[] args) throws IOException {
-        
+    public static void main(String[] args) throws IOException {        
         
         //Recupération du PCM fourni par l'utilisateur
         Scanner sc = new Scanner(System.in);
