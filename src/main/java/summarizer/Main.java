@@ -14,6 +14,7 @@ import org.opencompare.api.java.io.PCMLoader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -40,55 +41,13 @@ public class Main {
         List<PCMContainer> pcmContainers = loader.load(pcmFile);        
         PCM pcm = pcmContainers.get(0).getPcm(); //Récupère le PCM
         
-        //Begin format
-        StringBuilder builder = new StringBuilder();
-        builder.append("{ \"features\": [ ");
+        //Filtre
+        FiltreVisitor filter = new FiltreVisitor();
+        HashMap<String, HashMap<String, List>> dataFiltered = filter.filtre(pcm);
         
-        for(Feature feature: pcm.getConcreteFeatures()){
-            
-            List<Cell> cells = feature.getCells(); //Récupère l'ensemble des cellules de ce feature (domaine)
-            Filtre filtre = new FiltreImpl();
-            Regle regle = new Regle(cells);
-                        
-            //Construction du feature
-            builder.append("{\"nom\": \"").append(feature.getName()).append("\",");
-            builder.append("\"types\": [ ");
-            
-            //Construnction des types du feature
-            builder.append(regle.StringRule(filtre.getStringValues(cells), "String"));
-            builder.append(regle.numberRule(filtre.getNumberValues(cells), "Number"));
-            builder.append(regle.booleanRule(filtre.getBooleanValues(cells), "Boolean"));
-            builder.append(regle.StringRule(filtre.getConditionalValues(cells), "Conditional"));
-            builder.append(regle.StringRule(filtre.getDateValues(cells), "Date"));
-            builder.append(regle.StringRule(filtre.getDimensionValues(cells), "Dimension"));
-            builder.append(regle.StringRule(filtre.getMultipleValues(cells), "Multiple"));
-            builder.append(regle.StringRule(filtre.getNotApplicableValues(cells), "NotApplicable"));
-            builder.append(regle.StringRule(filtre.getPartialValues(cells), "Partial"));
-            builder.append(regle.StringRule(filtre.getUnitValues(cells), "Unit"));
-            builder.append(regle.StringRule(filtre.getVersionValues(cells), "Version"));
-            builder.append(regle.notApplicableRule(filtre.getNotAvailableValues(cells), "NotAvailable"));            
-            
-            builder.deleteCharAt(builder.lastIndexOf(","));
-            builder.append("]"); //EndTypes            
-            builder.append("},"); //EndFeature
-        }
-        builder.deleteCharAt(builder.lastIndexOf(","));
-        builder.append("]}"); //EndFeatures 
-        String jsonString =builder.toString();
-        
-        /**** Export *****/
+        // Export
         File resumeFile = new File("src/main/java/IHM/public_html/json/summarizer.json"); //fichier cible
-        sauvegarder(jsonString, resumeFile);
-        System.out.println("Resumé généré ! \nVeuillez ouvrir le fichier à l'emplacement suivant:");
-        System.out.println("src/main/java/IHM/public_html/index.htmlpcms/example.pcm");
-                
-    }    
-    
-    public static void sauvegarder(String data, File outputFile) throws IOException{
-        FileWriter fw;
-        fw = new FileWriter(outputFile);
-        fw.write(data);
-        fw.close();
-    }
-    
+        JsonExport exporter = new JsonExport();
+        exporter.export(dataFiltered, resumeFile);
+    }        
 }

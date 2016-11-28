@@ -6,6 +6,7 @@
 package summarizer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.opencompare.api.java.Cell;
 import org.opencompare.api.java.Feature;
@@ -34,20 +35,22 @@ import org.opencompare.api.java.value.Version;
  */
 public class FiltreVisitor implements PCMVisitor {
     
-    List<List> liste;
+    HashMap<String, List> listes;
+    HashMap<String, HashMap<String, List>> listeFeatures;
+    
     List booleans;
     List conditionals;
     List dateValues;
     List dimensions;
-    List integers;
     List multiples;
     List notApplicables; 
     List notAvailables; 
     List partials;
-    List realValues;
     List stringValues;
     List units;
     List versions;
+    List numbers;
+    
     
     Boolean isBooleanValue;
     Boolean isConditional;
@@ -64,124 +67,42 @@ public class FiltreVisitor implements PCMVisitor {
     Boolean isVersion;
     
     public FiltreVisitor(){
-        liste = new ArrayList();
+        listeFeatures = new HashMap();
+        listes = new HashMap();
+        
         booleans = new ArrayList<>();
         conditionals = new ArrayList<>();
         dateValues = new ArrayList<>();
         dimensions = new ArrayList<>();
-        integers = new ArrayList<>();
+        numbers = new ArrayList<>();
         multiples = new ArrayList<>();
         notApplicables = new ArrayList<>();
         notAvailables = new ArrayList<>();
         partials = new ArrayList<>();
-        realValues = new ArrayList<>();
         stringValues = new ArrayList<>();
         units = new ArrayList<>();
         versions = new ArrayList<>();
     }
     
-    public void filtre(PCM pcm) {
-        //Vider les collections
-        liste.clear();
-        booleans.clear();
-        conditionals.clear();
-        dateValues.clear();
-        dimensions.clear();
-        integers.clear();
-        multiples.clear();
-        notApplicables.clear();
-        notAvailables.clear();
-        partials.clear();
-        realValues.clear();
-        stringValues.clear();
-        units.clear();
-        versions.clear();
-        
+    public HashMap<String, HashMap<String, List>> filtre(PCM pcm) {        
         pcm.accept(this);
-
-        liste.add(booleans);
-        liste.add(conditionals);
-        liste.add(dateValues);
-        liste.add(dimensions);
-        liste.add(integers);
-        liste.add(multiples);
-        liste.add(notApplicables);
-        liste.add(notAvailables);
-        liste.add(partials);
-        liste.add(realValues);
-        liste.add(stringValues);
-        liste.add(units);
-        liste.add(versions);
+        return listeFeatures;
     }
     
     public void print(PCM pcm){
         filtre(pcm);
-        for(List l: liste){
-            for(Object v: l){
-                System.out.println(v.toString());
+        for(String key: listes.keySet()){
+            for(Object o: listes.get(key)){
+                System.out.println(o.toString());
             }
         }
-    }
-    
-    public List<List> getListe(PCM pcm){
-        filtre(pcm);
-        return liste;
-    }
-    
-    public List getBooleanList(){
-        return booleans;
-    }
-    
-    public List getConditionalList(){
-        return conditionals;
-    }
-    
-    public List getdateValueList(){
-        return dateValues;
-    }
-    
-    public List getDimensionList(){
-        return dimensions;
-    }
-    
-    public List getIntegerList(){
-        return integers;
-    }
-    
-    public List getMultipleList(){
-        return multiples;
-    }
-    
-    public List getNotAvailableList(){
-        return notAvailables;
-    }
-    
-    public List getNotApplicableList(){
-        return notApplicables;
-    }
-    
-    public List getPartialList(){
-        return partials;
-    }
-    
-    public List getRealValueList(){
-        return realValues;
-    }
-    
-    public List getStringValueList(){
-        return stringValues;
-    }
-    
-    public List getUnitList(){
-        return units;
-    }
-    
-    public List getVersionList(){
-        return versions;
     }
 
     @Override
     public void visit(PCM pcm) {
+        //Vider les collections
+        listeFeatures.clear();
+        
         for (Feature feature: pcm.getConcreteFeatures()) {
             feature.accept(this);
         }
@@ -189,9 +110,42 @@ public class FiltreVisitor implements PCMVisitor {
 
     @Override
     public void visit(Feature ftr) {
+        
+        //Vider les collections
+        listes.clear();
+        booleans.clear();
+        conditionals.clear();
+        dateValues.clear();
+        dimensions.clear();
+        numbers.clear();
+        multiples.clear();
+        notApplicables.clear();
+        notAvailables.clear();
+        partials.clear();
+        stringValues.clear();
+        units.clear();
+        versions.clear();
+        
         for (Cell cell : ftr.getCells()) {
-            cell.accept(this);
+            cell.accept(this);            
         }
+        
+        //Récupération des valeurs par type
+        listes.put("booleans", booleans);
+        listes.put("conditionals", conditionals);
+        listes.put("dateValues", dateValues);
+        listes.put("dimensions", dimensions);
+        listes.put("numbers", numbers);
+        listes.put("multiples", multiples);
+        listes.put("notApplicables", notApplicables);
+        listes.put("notAvailables", notAvailables);
+        listes.put("partials", partials);
+        listes.put("stringValues", stringValues);
+        listes.put("units", units);
+        listes.put("versions", versions);
+        
+        //Enregistrement du nom du feature et sa collection de valeurs
+        listeFeatures.put(ftr.getName(), listes);   
     }
 
     @Override
@@ -238,7 +192,7 @@ public class FiltreVisitor implements PCMVisitor {
             dimensions.add(cell.getContent());
         }
         if(isIntegerValue){
-            integers.add(cell.getContent());
+            numbers.add(cell.getContent());
         }
         if(isMultiple){
             multiples.add(cell.getContent());
@@ -253,7 +207,7 @@ public class FiltreVisitor implements PCMVisitor {
             partials.add(cell.getContent());
         }
         if(isRealValue){
-            realValues.add(cell.getContent());
+            numbers.add(cell.getContent());
         }
         if(isStringValue){
             stringValues.add(cell.getContent());

@@ -14,16 +14,14 @@ import java.util.Map;
  */
 public class Regle {
     
-    Motif motif;
-    float tailleDomaine;
+    Motif motif;    
     
     /**
      * Constructeur
-     * @param domaine 
+     * Instancie un motif
      */
-    public Regle(Collection domaine){
+    public Regle(){
         motif = new MotifImpl();
-        tailleDomaine = domaine.size();
     }
     
     /**
@@ -36,7 +34,7 @@ public class Regle {
      * @param nomSousDomaine
      * @return Objet json
      */
-    public String StringRule(Collection sousDomaine, String nomSousDomaine){        
+    public String StringRule(Collection sousDomaine, String nomSousDomaine, float tailleDomaine){        
         if(sousDomaine.size() > 0){
             StringBuilder builder = new StringBuilder();
             float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
@@ -79,6 +77,7 @@ public class Regle {
                 builder.append("},");
             }
             builder.deleteCharAt(builder.lastIndexOf(","));
+            
             builder.append("}");
             builder.append("},");
 
@@ -100,7 +99,7 @@ public class Regle {
      * @param nomSousDomaine
      * @return Objet json
      */
-    public String numberRule(Collection sousDomaine, String nomSousDomaine){
+    public String numberRule(Collection sousDomaine, String nomSousDomaine, float tailleDomaine){
         if(sousDomaine.size() > 0){
             StringBuilder builder = new StringBuilder();
             float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
@@ -118,6 +117,7 @@ public class Regle {
             builder.append("\"max\": ").append(max).append(",");
             builder.append("\"min\": ").append(min).append(",");
             builder.append("\"ecartType\": ").append(ecartType);
+            
             builder.append("}");
             builder.append("},");
 
@@ -137,7 +137,7 @@ public class Regle {
      * @param nomSousDomaine
      * @return Objet json
      */
-    public String booleanRule(Collection sousDomaine, String nomSousDomaine){
+    public String booleanRule(Collection sousDomaine, String nomSousDomaine, float tailleDomaine){
         if(sousDomaine.size() > 0){
             StringBuilder builder = new StringBuilder();
             float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
@@ -155,6 +155,7 @@ public class Regle {
             }
             builder.deleteCharAt(builder.lastIndexOf(","));
             builder.append("}");
+            
             builder.append("}");
             builder.append("},");
 
@@ -173,7 +174,7 @@ public class Regle {
      * @param nomSousDomaine
      * @return Objet json
      */
-    public String notApplicableRule(Collection sousDomaine, String nomSousDomaine){
+    public String notApplicableRule(Collection sousDomaine, String nomSousDomaine, float tailleDomaine){
         if(sousDomaine.size() > 0){
             StringBuilder builder = new StringBuilder();
             float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;

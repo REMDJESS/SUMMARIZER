@@ -6,14 +6,10 @@
 package summarizer;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
-
-import org.opencompare.api.java.*;
-import org.opencompare.api.java.impl.io.KMFJSONLoader;
-import org.opencompare.api.java.io.PCMLoader;
 
 /**
  *
@@ -21,61 +17,115 @@ import org.opencompare.api.java.io.PCMLoader;
  */
 public class JsonExport {
     
+    StringBuilder builder;
+    Regle rule;
+    
     /**
-     * Formater un fichier PCM en une chaine de caractère au format JSON
-     * @param pcmFile Fichier PCM à convertir en JSON
-     * @return
+     * Constructeur
+     * Instancie un string builder et une règle
+     */
+    public JsonExport(){
+        builder = new StringBuilder("");
+        rule = new Regle();
+    }
+    
+    /**
+     * Copie le resultat du formattage en Json dans le fichier spécifié
+     * 
+     * @param listeFeatures Données à formater puis à sauvegarder
+     * @param resumeFile Fichier cible pour la sauvegarde des données
      * @throws IOException 
      */
-    public String toJson(File pcmFile) throws IOException {
-        // Create a loader that can handle the file format
-        PCMLoader loader = new KMFJSONLoader();
-        // Load the file
-        // A loader may return multiple PCM containers depending on the input format
-        // A PCM container encapsulates a PCM and its associated metadata
-        List<PCMContainer> pcmContainers = loader.load(pcmFile);
-        //Build a String
-        StringBuilder builder = new StringBuilder();
-        
-        for (PCMContainer pcmContainer : pcmContainers) {            
-            // Get the PCM
-            PCM pcm = pcmContainer.getPcm();            
-            //Begin format
-            builder.append("{ \"produits\": [ \n");
-            // Browse the cells of the PCM
-            for (Product product : pcm.getProducts()) {
-                builder.append("{\"Produit\": \"").append(product.getKeyContent()).append("\", \n \"caracteristiques\" : [ \n");
-                for (Feature feature : pcm.getConcreteFeatures()) {
-                    // Find the cell corresponding to the current feature and product
-                    Cell cell = product.findCell(feature);
-                    String featureName = feature.getName().replaceAll("(\")", "'");
-                    String featureValue = cell.getContent().replaceAll("(\")", "'");
-                    
-                    builder.append("\t {\"caracteristique\": \"").append(featureName).append("\", \"valeur\": \"").append(featureValue).append("\"}, \n");
-                }
-                builder.deleteCharAt(builder.lastIndexOf(","));
-                builder.append("]}, \n");
-            }
+    public void export(HashMap<String, HashMap<String, List>> listeFeatures, File resumeFile) throws IOException{
+        String dataFormated = toJson(listeFeatures);
+        saveTo(dataFormated, resumeFile);
+        System.out.println("Resumé généré ! \nVeuillez ouvrir le fichier à l'emplacement suivant:");
+        System.out.println("src/main/java/IHM/public_html/index.html/pcms/example.pcm");
+    }
+    
+    /**
+     * Format la HashMap fournit en Json
+     * 
+     * @param listeFeatures HashMap contenant une liste de features
+     * @return Chaine de caractère au format Json
+     */
+    private String toJson(HashMap<String, HashMap<String, List>> listeFeatures){
+        builder.append("{ \"features\": [ ");
+        for(String key: listeFeatures.keySet()){
+            String nomFeature = key;
+            HashMap<String, List> listeFeatureCells = listeFeatures.get(key);
+            int TotalFeatureCells = getTotalFeatureCells(listeFeatureCells);
+            
+            //startFeature
+            builder.append("{\"nom\": \"").append(nomFeature).append("\",");
+            builder.append("\"types\": [ ");
+            
+            listeFeatureCellsToJson(listeFeatureCells, TotalFeatureCells);
+            
             builder.deleteCharAt(builder.lastIndexOf(","));
-            builder.append("]}");
+            builder.append("]"); //EndTypes            
+            builder.append("},"); //EndFeature
         }
+        builder.deleteCharAt(builder.lastIndexOf(","));
+        builder.append("]}"); //EndFeatures
         return builder.toString();
     }
     
     /**
-     * Exporter un fichier PCM au format JSON
-     * @param pcmFile Fichier PCM à convertir en JSON puis exporter
+     * Applique les règles nécessaire à l'édition du resumé selon le sous domaine en présence
+     * et formate le resultat en Json
+     * 
+     * @param listes Ensemble des listes des différents type composant le feature
+     * @param TotalFeatureCells Nombre total de cellule du feature
+     */
+    private void listeFeatureCellsToJson(HashMap<String, List> listes, int TotalFeatureCells){
+        for(String key: listes.keySet()){
+            String nomSousDomaine = key;
+            List sousDomaine = listes.get(key);
+            
+            switch(nomSousDomaine){
+                case "booleans": 
+                    builder.append(rule.booleanRule(sousDomaine, nomSousDomaine, TotalFeatureCells));
+                break;
+                case "notApplicables": 
+                    builder.append(rule.notApplicableRule(sousDomaine, nomSousDomaine, TotalFeatureCells));
+                break;
+                case "numbers": 
+                    builder.append(rule.numberRule(sousDomaine, nomSousDomaine, TotalFeatureCells));
+                break;
+                default: 
+                    builder.append(rule.StringRule(sousDomaine, nomSousDomaine, TotalFeatureCells));
+                break;
+            }
+        }
+    }
+    
+    /**
+     * Recupère le nombre total de cellule du feature
+     * 
+     * @param valuesCellsFeature
+     * @return 
+     */
+    private int getTotalFeatureCells(HashMap<String, List> valuesCellsFeature){
+        int totalSize = 0;
+        for(String key: valuesCellsFeature.keySet()){
+            totalSize +=  valuesCellsFeature.get(key).size();
+        }
+        return totalSize;
+    }
+    
+    /**
+     * Sauvegarde les données au format string dans un fichier spécifié
+     * 
+     * @param data Chaines de caractère à sauvegarder
+     * @param outputFile Fichier de sauvegarde
      * @throws IOException 
      */
-    public void export(File pcmFile) throws IOException{
-        String json = this.toJson(pcmFile);
-        //File newFile = new File("/");
-        
-        // Write JSON content to file
-        //Path outputFile = File.createTempFile("oc-", ".json", newFile);
-        Path outputFile = Files.createTempFile("oc-", ".json");
-        Files.write(outputFile, json.getBytes());
-        System.out.println("PCM exported to " + outputFile);     
+    private void saveTo(String data, File outputFile) throws IOException{
+        FileWriter fw;
+        fw = new FileWriter(outputFile);
+        fw.write(data);
+        fw.close();
     }
     
 }
