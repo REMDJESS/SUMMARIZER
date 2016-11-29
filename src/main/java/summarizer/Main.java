@@ -42,7 +42,7 @@ public class Main {
         
         //Filtre
         FiltreVisitor filter = new FiltreVisitor();
-        HashMap<String, HashMap<String, List<String>>> dataFiltered = filter.filtre(pcm);
+        HashMap<String, HashMap<String, List<Object>>> dataFiltered = filter.filtre(pcm);
         
         // Export
         File resumeFile = new File("src/main/java/IHM/public_html/json/summarizer.json"); //fichier cible

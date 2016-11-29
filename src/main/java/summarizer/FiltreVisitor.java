@@ -23,8 +23,8 @@ import org.opencompare.api.java.value.*;
  */
 public class FiltreVisitor implements PCMVisitor {
     
-    HashMap<String, List<String>> listes;
-    HashMap<String, HashMap<String, List<String>>> listeFeatures;
+    HashMap<String, List<Object>> listes;
+    HashMap<String, HashMap<String, List<Object>>> listeFeatures;
 
     Boolean isBooleanValue;
     Boolean isConditional;
@@ -45,20 +45,20 @@ public class FiltreVisitor implements PCMVisitor {
         listes = new HashMap<>();
     }
     
-    public HashMap<String, HashMap<String, List<String>>> filtre(PCM pcm) {        
+    public HashMap<String, HashMap<String, List<Object>>> filtre(PCM pcm) {        
         pcm.accept(this);
         return listeFeatures;
     }
     
     public void print(PCM pcm){
-    	HashMap<String, HashMap<String, List<String>>> lf = filtre(pcm);
+    	HashMap<String, HashMap<String, List<Object>>> lf = filtre(pcm);
         for(String nomFeature: lf.keySet()){
-        	HashMap<String, List<String>> listeCellsValuesByType = lf.get(nomFeature);
+        	HashMap<String, List<Object>> listeCellsValuesByType = lf.get(nomFeature);
         	System.out.println("\n/********* " + nomFeature + " *********/");
         	for(String nomType: listeCellsValuesByType.keySet()){
-            	List<String> listeValue = listeCellsValuesByType.get(nomType);
+            	List<Object> listeValue = listeCellsValuesByType.get(nomType);
             	System.out.println("/---------- " + nomType + " ----------/");
-                for(String value: listeValue){
+                for(Object value: listeValue){
                 	System.out.println(value);
                 }
             }
@@ -121,7 +121,7 @@ public class FiltreVisitor implements PCMVisitor {
             	listes.get("booleans").add(cell.getContent());
         	}
         	else{
-        		List<String> liste = new ArrayList<>();
+        		List<Object> liste = new ArrayList<>();
         		liste.add(cell.getContent());
         		listes.put("booleans", liste);
         	}
@@ -131,7 +131,7 @@ public class FiltreVisitor implements PCMVisitor {
             	listes.get("conditionals").add(cell.getContent());
         	}
         	else{
-        		List<String> liste = new ArrayList<>();
+        		List<Object> liste = new ArrayList<>();
         		liste.add(cell.getContent());
         		listes.put("conditionals", liste);
         	}        
@@ -141,7 +141,7 @@ public class FiltreVisitor implements PCMVisitor {
             	listes.get("dateValues").add(cell.getContent());
         	}
         	else{
-        		List<String> liste = new ArrayList<>();
+        		List<Object> liste = new ArrayList<>();
         		liste.add(cell.getContent());
         		listes.put("dateValues", liste);
         	}        
@@ -151,18 +151,18 @@ public class FiltreVisitor implements PCMVisitor {
             	listes.get("dimensions").add(cell.getContent());
         	}
         	else{
-        		List<String> liste = new ArrayList<>();
+        		List<Object> liste = new ArrayList<>();
         		liste.add(cell.getContent());
         		listes.put("dimensions", liste);
         	}        
         }
         if(isIntegerValue){
         	if(listes.containsKey("numbers")){
-            	listes.get("numbers").add(cell.getContent());
+            	listes.get("numbers").add(Float.parseFloat(cell.getContent()));
         	}
         	else{
-        		List<String> liste = new ArrayList<>();
-        		liste.add(cell.getContent());
+        		List<Object> liste = new ArrayList<>();
+        		liste.add(Float.parseFloat(cell.getContent()));
         		listes.put("numbers", liste);
         	}        
         }
@@ -171,7 +171,7 @@ public class FiltreVisitor implements PCMVisitor {
             	listes.get("multiples").add(cell.getContent());
         	}
         	else{
-        		List<String> liste = new ArrayList<>();
+        		List<Object> liste = new ArrayList<>();
         		liste.add(cell.getContent());
         		listes.put("multiples", liste);
         	}        
@@ -181,7 +181,7 @@ public class FiltreVisitor implements PCMVisitor {
             	listes.get("notApplicables").add(cell.getContent());
         	}
         	else{
-        		List<String> liste = new ArrayList<>();
+        		List<Object> liste = new ArrayList<>();
         		liste.add(cell.getContent());
         		listes.put("notApplicables", liste);
         	}        
@@ -191,7 +191,7 @@ public class FiltreVisitor implements PCMVisitor {
             	listes.get("notAvailables").add(cell.getContent());
         	}
         	else{
-        		List<String> liste = new ArrayList<>();
+        		List<Object> liste = new ArrayList<>();
         		liste.add(cell.getContent());
         		listes.put("notAvailables", liste);
         	}       
@@ -201,18 +201,18 @@ public class FiltreVisitor implements PCMVisitor {
             	listes.get("partials").add(cell.getContent());
         	}
         	else{
-        		List<String> liste = new ArrayList<>();
+        		List<Object> liste = new ArrayList<>();
         		liste.add(cell.getContent());
         		listes.put("partials", liste);
         	}       
         }
         if(isRealValue){
         	if(listes.containsKey("numbers")){
-            	listes.get("numbers").add(cell.getContent());
+            	listes.get("numbers").add(Float.parseFloat(cell.getContent()));
         	}
         	else{
-        		List<String> liste = new ArrayList<>();
-        		liste.add(cell.getContent());
+        		List<Object> liste = new ArrayList<>();
+        		liste.add(Float.parseFloat(cell.getContent()));
         		listes.put("numbers", liste);
         	}       
         }
@@ -221,7 +221,7 @@ public class FiltreVisitor implements PCMVisitor {
             	listes.get("stringValues").add(cell.getContent());
         	}
         	else{
-        		List<String> liste = new ArrayList<>();
+        		List<Object> liste = new ArrayList<>();
         		liste.add(cell.getContent());
         		listes.put("stringValues", liste);
         	}       
@@ -231,7 +231,7 @@ public class FiltreVisitor implements PCMVisitor {
             	listes.get("units").add(cell.getContent());
         	}
         	else{
-        		List<String> liste = new ArrayList<>();
+        		List<Object> liste = new ArrayList<>();
         		liste.add(cell.getContent());
         		listes.put("units", liste);
         	}       
@@ -241,7 +241,7 @@ public class FiltreVisitor implements PCMVisitor {
             	listes.get("versions").add(cell.getContent());
         	}
         	else{
-        		List<String> liste = new ArrayList<>();
+        		List<Object> liste = new ArrayList<>();
         		liste.add(cell.getContent());
         		listes.put("versions", liste);
         	}                   
