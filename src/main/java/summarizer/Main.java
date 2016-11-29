@@ -5,18 +5,17 @@
  */
 package summarizer;
 
-//import org.opencompare.MyPCMPrinter;
-
-import org.opencompare.api.java.*;
-import org.opencompare.api.java.impl.io.KMFJSONLoader;
-import org.opencompare.api.java.io.PCMLoader;
-
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+
+//import org.opencompare.MyPCMPrinter;
+import org.opencompare.api.java.PCM;
+import org.opencompare.api.java.PCMContainer;
+import org.opencompare.api.java.impl.io.KMFJSONLoader;
+import org.opencompare.api.java.io.PCMLoader;
 
 
 /**
@@ -43,7 +42,7 @@ public class Main {
         
         //Filtre
         FiltreVisitor filter = new FiltreVisitor();
-        HashMap<String, HashMap<String, List>> dataFiltered = filter.filtre(pcm);
+        HashMap<String, HashMap<String, List<String>>> dataFiltered = filter.filtre(pcm);
         
         // Export
         File resumeFile = new File("src/main/java/IHM/public_html/json/summarizer.json"); //fichier cible

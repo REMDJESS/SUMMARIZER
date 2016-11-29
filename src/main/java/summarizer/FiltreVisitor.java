@@ -15,19 +15,7 @@ import org.opencompare.api.java.PCM;
 import org.opencompare.api.java.Product;
 import org.opencompare.api.java.Value;
 import org.opencompare.api.java.util.PCMVisitor;
-import org.opencompare.api.java.value.BooleanValue;
-import org.opencompare.api.java.value.Conditional;
-import org.opencompare.api.java.value.DateValue;
-import org.opencompare.api.java.value.Dimension;
-import org.opencompare.api.java.value.IntegerValue;
-import org.opencompare.api.java.value.Multiple;
-import org.opencompare.api.java.value.NotApplicable;
-import org.opencompare.api.java.value.NotAvailable;
-import org.opencompare.api.java.value.Partial;
-import org.opencompare.api.java.value.RealValue;
-import org.opencompare.api.java.value.StringValue;
-import org.opencompare.api.java.value.Unit;
-import org.opencompare.api.java.value.Version;
+import org.opencompare.api.java.value.*;
 
 /**
  *
@@ -35,23 +23,9 @@ import org.opencompare.api.java.value.Version;
  */
 public class FiltreVisitor implements PCMVisitor {
     
-    HashMap<String, List> listes;
-    HashMap<String, HashMap<String, List>> listeFeatures;
-    
-    List booleans;
-    List conditionals;
-    List dateValues;
-    List dimensions;
-    List multiples;
-    List notApplicables; 
-    List notAvailables; 
-    List partials;
-    List stringValues;
-    List units;
-    List versions;
-    List numbers;
-    
-    
+    HashMap<String, List<String>> listes;
+    HashMap<String, HashMap<String, List<String>>> listeFeatures;
+
     Boolean isBooleanValue;
     Boolean isConditional;
     Boolean isDateValue;
@@ -67,41 +41,34 @@ public class FiltreVisitor implements PCMVisitor {
     Boolean isVersion;
     
     public FiltreVisitor(){
-        listeFeatures = new HashMap();
-        listes = new HashMap();
-        
-        booleans = new ArrayList<>();
-        conditionals = new ArrayList<>();
-        dateValues = new ArrayList<>();
-        dimensions = new ArrayList<>();
-        numbers = new ArrayList<>();
-        multiples = new ArrayList<>();
-        notApplicables = new ArrayList<>();
-        notAvailables = new ArrayList<>();
-        partials = new ArrayList<>();
-        stringValues = new ArrayList<>();
-        units = new ArrayList<>();
-        versions = new ArrayList<>();
+        listeFeatures = new HashMap<>();
+        listes = new HashMap<>();
     }
     
-    public HashMap<String, HashMap<String, List>> filtre(PCM pcm) {        
+    public HashMap<String, HashMap<String, List<String>>> filtre(PCM pcm) {        
         pcm.accept(this);
         return listeFeatures;
     }
     
     public void print(PCM pcm){
-        filtre(pcm);
-        for(String key: listes.keySet()){
-            for(Object o: listes.get(key)){
-                System.out.println(o.toString());
+    	HashMap<String, HashMap<String, List<String>>> lf = filtre(pcm);
+        for(String nomFeature: lf.keySet()){
+        	HashMap<String, List<String>> listeCellsValuesByType = lf.get(nomFeature);
+        	System.out.println("\n/********* " + nomFeature + " *********/");
+        	for(String nomType: listeCellsValuesByType.keySet()){
+            	List<String> listeValue = listeCellsValuesByType.get(nomType);
+            	System.out.println("/---------- " + nomType + " ----------/");
+                for(String value: listeValue){
+                	System.out.println(value);
+                }
             }
         }
     }
 
     @Override
     public void visit(PCM pcm) {
-        //Vider les collections
-        listeFeatures.clear();
+        //Nouvelle collection
+        listeFeatures = new HashMap<>();
         
         for (Feature feature: pcm.getConcreteFeatures()) {
             feature.accept(this);
@@ -110,53 +77,22 @@ public class FiltreVisitor implements PCMVisitor {
 
     @Override
     public void visit(Feature ftr) {
+        //Nouvelle collection
+        listes = new HashMap<>();
         
-        //Vider les collections
-        listes.clear();
-        booleans.clear();
-        conditionals.clear();
-        dateValues.clear();
-        dimensions.clear();
-        numbers.clear();
-        multiples.clear();
-        notApplicables.clear();
-        notAvailables.clear();
-        partials.clear();
-        stringValues.clear();
-        units.clear();
-        versions.clear();
-        
-        for (Cell cell : ftr.getCells()) {
-            cell.accept(this);            
+        for (Cell cell : ftr.getCells()) {        	
+        	cell.accept(this);
         }
         
-        //Récupération des valeurs par type
-        listes.put("booleans", booleans);
-        listes.put("conditionals", conditionals);
-        listes.put("dateValues", dateValues);
-        listes.put("dimensions", dimensions);
-        listes.put("numbers", numbers);
-        listes.put("multiples", multiples);
-        listes.put("notApplicables", notApplicables);
-        listes.put("notAvailables", notAvailables);
-        listes.put("partials", partials);
-        listes.put("stringValues", stringValues);
-        listes.put("units", units);
-        listes.put("versions", versions);
-        
         //Enregistrement du nom du feature et sa collection de valeurs
-        listeFeatures.put(ftr.getName(), listes);   
+        listeFeatures.put(ftr.getName(), listes);
     }
 
     @Override
     public void visit(FeatureGroup fg) {}
 
     @Override
-    public void visit(Product prdct) {
-        for (Cell cell : prdct.getCells()) {
-            cell.accept(this);
-        }
-    }
+    public void visit(Product prdct) {}
 
     @Override
     public void visit(Cell cell) {
@@ -179,44 +115,136 @@ public class FiltreVisitor implements PCMVisitor {
         if (interpretation != null) {
             interpretation.accept(this);
         }
+        
         if(isBooleanValue){
-            booleans.add(cell.getContent());
+        	if(listes.containsKey("booleans")){
+            	listes.get("booleans").add(cell.getContent());
+        	}
+        	else{
+        		List<String> liste = new ArrayList<>();
+        		liste.add(cell.getContent());
+        		listes.put("booleans", liste);
+        	}
         }
         if(isConditional){
-            conditionals.add(cell.getContent());
+        	if(listes.containsKey("conditionals")){
+            	listes.get("conditionals").add(cell.getContent());
+        	}
+        	else{
+        		List<String> liste = new ArrayList<>();
+        		liste.add(cell.getContent());
+        		listes.put("conditionals", liste);
+        	}        
         }
         if(isDateValue){
-            dateValues.add(cell.getContent());
+        	if(listes.containsKey("dateValues")){
+            	listes.get("dateValues").add(cell.getContent());
+        	}
+        	else{
+        		List<String> liste = new ArrayList<>();
+        		liste.add(cell.getContent());
+        		listes.put("dateValues", liste);
+        	}        
         }
         if(isDimension){
-            dimensions.add(cell.getContent());
+        	if(listes.containsKey("dimensions")){
+            	listes.get("dimensions").add(cell.getContent());
+        	}
+        	else{
+        		List<String> liste = new ArrayList<>();
+        		liste.add(cell.getContent());
+        		listes.put("dimensions", liste);
+        	}        
         }
         if(isIntegerValue){
-            numbers.add(cell.getContent());
+        	if(listes.containsKey("numbers")){
+            	listes.get("numbers").add(cell.getContent());
+        	}
+        	else{
+        		List<String> liste = new ArrayList<>();
+        		liste.add(cell.getContent());
+        		listes.put("numbers", liste);
+        	}        
         }
         if(isMultiple){
-            multiples.add(cell.getContent());
+        	if(listes.containsKey("multiples")){
+            	listes.get("multiples").add(cell.getContent());
+        	}
+        	else{
+        		List<String> liste = new ArrayList<>();
+        		liste.add(cell.getContent());
+        		listes.put("multiples", liste);
+        	}        
         }
         if(isNotApplicable){
-            notApplicables.add(cell.getContent());
+        	if(listes.containsKey("notApplicables")){
+            	listes.get("notApplicables").add(cell.getContent());
+        	}
+        	else{
+        		List<String> liste = new ArrayList<>();
+        		liste.add(cell.getContent());
+        		listes.put("notApplicables", liste);
+        	}        
         }
         if(isNotAvailable){
-            notAvailables.add(cell.getContent());
+        	if(listes.containsKey("notAvailables")){
+            	listes.get("notAvailables").add(cell.getContent());
+        	}
+        	else{
+        		List<String> liste = new ArrayList<>();
+        		liste.add(cell.getContent());
+        		listes.put("notAvailables", liste);
+        	}       
         }
         if(isPartial){
-            partials.add(cell.getContent());
+        	if(listes.containsKey("partials")){
+            	listes.get("partials").add(cell.getContent());
+        	}
+        	else{
+        		List<String> liste = new ArrayList<>();
+        		liste.add(cell.getContent());
+        		listes.put("partials", liste);
+        	}       
         }
         if(isRealValue){
-            numbers.add(cell.getContent());
+        	if(listes.containsKey("numbers")){
+            	listes.get("numbers").add(cell.getContent());
+        	}
+        	else{
+        		List<String> liste = new ArrayList<>();
+        		liste.add(cell.getContent());
+        		listes.put("numbers", liste);
+        	}       
         }
         if(isStringValue){
-            stringValues.add(cell.getContent());
+        	if(listes.containsKey("stringValues")){
+            	listes.get("stringValues").add(cell.getContent());
+        	}
+        	else{
+        		List<String> liste = new ArrayList<>();
+        		liste.add(cell.getContent());
+        		listes.put("stringValues", liste);
+        	}       
         }
         if(isUnit){
-            units.add(cell.getContent());
+        	if(listes.containsKey("units")){
+            	listes.get("units").add(cell.getContent());
+        	}
+        	else{
+        		List<String> liste = new ArrayList<>();
+        		liste.add(cell.getContent());
+        		listes.put("units", liste);
+        	}       
         }
         if(isVersion){
-            versions.add(cell.getContent());
+        	if(listes.containsKey("versions")){
+            	listes.get("versions").add(cell.getContent());
+        	}
+        	else{
+        		List<String> liste = new ArrayList<>();
+        		liste.add(cell.getContent());
+        		listes.put("versions", liste);
+        	}                   
         }        
     }
 
@@ -283,6 +311,5 @@ public class FiltreVisitor implements PCMVisitor {
     @Override
     public void visit(Version vrsn) {
         isVersion = true;
-    }
-    
+    }    
 }

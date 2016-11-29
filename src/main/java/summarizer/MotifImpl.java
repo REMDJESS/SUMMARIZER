@@ -46,7 +46,7 @@ public class MotifImpl implements Motif{
         float compteur;
         float fraction;
         Map<String, Float> tabPourc = new HashMap<>();
-        Set criteres = new HashSet(data); //Recupère les éléments sans redondances
+        Set criteres = new HashSet<>(data); //Recupère les éléments sans redondances
         
         try{
             for(Object critere: criteres){

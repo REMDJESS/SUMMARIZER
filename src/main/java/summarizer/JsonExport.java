@@ -36,7 +36,7 @@ public class JsonExport {
      * @param resumeFile Fichier cible pour la sauvegarde des données
      * @throws IOException 
      */
-    public void export(HashMap<String, HashMap<String, List>> listeFeatures, File resumeFile) throws IOException{
+    public void export(HashMap<String, HashMap<String, List<String>>> listeFeatures, File resumeFile) throws IOException{
         String dataFormated = toJson(listeFeatures);
         saveTo(dataFormated, resumeFile);
         System.out.println("Resumé généré ! \nVeuillez ouvrir le fichier à l'emplacement suivant:");
@@ -49,11 +49,11 @@ public class JsonExport {
      * @param listeFeatures HashMap contenant une liste de features
      * @return Chaine de caractère au format Json
      */
-    private String toJson(HashMap<String, HashMap<String, List>> listeFeatures){
+    private String toJson(HashMap<String, HashMap<String, List<String>>> listeFeatures){
         builder.append("{ \"features\": [ ");
         for(String key: listeFeatures.keySet()){
             String nomFeature = key;
-            HashMap<String, List> listeFeatureCells = listeFeatures.get(key);
+            HashMap<String, List<String>> listeFeatureCells = listeFeatures.get(key);
             int TotalFeatureCells = getTotalFeatureCells(listeFeatureCells);
             
             //startFeature
@@ -78,10 +78,10 @@ public class JsonExport {
      * @param listes Ensemble des listes des différents type composant le feature
      * @param TotalFeatureCells Nombre total de cellule du feature
      */
-    private void listeFeatureCellsToJson(HashMap<String, List> listes, int TotalFeatureCells){
+    private void listeFeatureCellsToJson(HashMap<String, List<String>> listes, int TotalFeatureCells){
         for(String key: listes.keySet()){
             String nomSousDomaine = key;
-            List sousDomaine = listes.get(key);
+            List<String> sousDomaine = listes.get(key);
             
             switch(nomSousDomaine){
                 case "booleans": 
@@ -106,7 +106,7 @@ public class JsonExport {
      * @param valuesCellsFeature
      * @return 
      */
-    private int getTotalFeatureCells(HashMap<String, List> valuesCellsFeature){
+    private int getTotalFeatureCells(HashMap<String, List<String>> valuesCellsFeature){
         int totalSize = 0;
         for(String key: valuesCellsFeature.keySet()){
             totalSize +=  valuesCellsFeature.get(key).size();
