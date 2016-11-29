@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-//import java.util.Date;
 import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -44,11 +43,7 @@ public class MotifImplTest {
     
     @Before
     public void setUp() {
-       // Collection<Float> CollectInt = new ArrayList<>(Arrays.asList(1,2,3,8,14,25,44));
-       // ArrayList<String> collectString = new ArrayList<>(Arrays.asList("hp","ibm","acer","ibm","hp"));
-      //  Collection<Float> collectFloat;
-       // collectFloat = new ArrayList<>(Arrays.asList(1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f));
-        
+               
     }
     
     @After
@@ -62,15 +57,15 @@ public class MotifImplTest {
     @Test
     public void testMoyenne() {
         Collection<Float> collectFloat;
-        collectFloat = new ArrayList<>(Arrays.asList(10.0f,10.0f,10.0f,10.0f,10.0f,10.0f,10.0f));
+        collectFloat = new ArrayList<>(Arrays.asList(12.5f,15.25f,19.10f,21.8f,14.33f,44.1f,17.0f));
     
 
         System.out.println("MotifImpl.moyenne :");
 
         MotifImpl myMotifImpl = new MotifImpl();
-        float expResult = 10.0F;
+        float expResult = 20.5828F;
         float result = myMotifImpl.moyenne(collectFloat);
-        assertEquals(expResult, result, 0.0);
+        assertEquals(expResult, result, 0.009);
         
     }
 
@@ -81,11 +76,11 @@ public class MotifImplTest {
     @Test
     public void testPourcentage() {
         Collection<String> collectPourcentage;
-        collectPourcentage = new ArrayList<>(Arrays.asList("primero","segundo","tercero","primero","segundo","primero"));
+        collectPourcentage = new ArrayList<>(Arrays.asList("Lima","Santiago","Quito","Lima","Santiago","Lima"));
         HashMap<String, Float> expResult = new HashMap<>();
-              expResult.put("primero", 50.0f);
-              expResult.put("segundo", 33.333336f);
-              expResult.put("tercero", 16.666668f);
+              expResult.put("Lima", 50.0f);
+              expResult.put("Santiago", 33.333336f);
+              expResult.put("Quito", 16.666668f);
      
                 
         System.out.println("MotifImpl.pourcentage :");
