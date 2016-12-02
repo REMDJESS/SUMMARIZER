@@ -173,3 +173,6 @@ ul.menu-navigation li a:hover div{display:block;font-size:0.8em;padding:10px 0;}
 .type{
     text-transform: uppercase;
 }
+.data{
+    color: #d9534f;
+}
