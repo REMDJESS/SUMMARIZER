@@ -26,7 +26,7 @@
                             var type = types[j].type;
                             var resume = types[j].resume;
                             switch (type) {
-                                case "Number":
+                                case "numbers":
                                     //afficher la moyenne
                                     var moyenne = resume.moyenne;
                                     var max = resume.max;
@@ -37,7 +37,7 @@
                                                         avec un écart type de <span class="data">' + ecart + '</span> </div>'
 
                                     break;
-                                case "Boolean":
+                                case "booleans":
                                     var pourcentage = resume.pourcentage;
                                     var array = Object.keys(pourcentage);
                                     collapseBody += '<div>Le feature présente les valeurs suivantes: ';
@@ -47,12 +47,11 @@
                                     }
                                     collapseBody += '</div>';
                                     break;
-                                case "NotAvailable":
+                                case "notAvailables":
                                     var pourcentage = types.porcentageType;
                                     collapseBody += '<div> ' + types[j].porcentageType+ ' % des valeurs ne sont pas renseinées</div>';
                                     break;
-                                default:
-
+                                case "stringValues":                                  
                                     var max = resume.max;
                                     var array_max = Object.keys(max);
                                     collapseBody += '<div>Les valeurs les plus representées avec un pourcentage de <span class="data">' + max[array_max[0]] + '%</span> sont: ';
@@ -70,6 +69,45 @@
                                         collapseBody += key + ', ';
                                     }
                                     collapseBody += '</div>';
+                                    break;
+                                case "multiples":                                  
+                                    var max = resume.max;
+                                    var array_max = Object.keys(max);
+                                    collapseBody += '<div>Les valeurs les plus representées avec un pourcentage de <span class="data">' + max[array_max[0]] + '%</span> sont: ';
+                                    for (cpt = 0; cpt < array_max.length; cpt++) {
+                                        var key = array_max[cpt];
+                                        collapseBody += key + ', ';
+                                    }
+                                    collapseBody += '</div>';
+
+                                    var min = resume.min;
+                                    var array_min = Object.keys(min);
+                                    collapseBody += '<div>Les valeurs les moins representées avec un pourcentage de <span class="data">' + min[array_min[0]] + '%</span> sont: ';
+                                    for (cpt = 0; cpt < array_min.length; cpt++) {
+                                        var key = array_min[cpt];
+                                        collapseBody += key + ', ';
+                                    }
+                                    collapseBody += '</div>';
+                                    break;
+                                default:
+
+//                                    var max = resume.max;
+//                                    var array_max = Object.keys(max);
+//                                    collapseBody += '<div>Les valeurs les plus representées avec un pourcentage de <span class="data">' + max[array_max[0]] + '%</span> sont: ';
+//                                    for (cpt = 0; cpt < array_max.length; cpt++) {
+//                                        var key = array_max[cpt];
+//                                        collapseBody += key + ', ';
+//                                    }
+//                                    collapseBody += '</div>';
+//
+//                                    var min = resume.min;
+//                                    var array_min = Object.keys(min);
+//                                    collapseBody += '<div>Les valeurs les moins representées avec un pourcentage de <span class="data">' + min[array_min[0]] + '%</span> sont: ';
+//                                    for (cpt = 0; cpt < array_min.length; cpt++) {
+//                                        var key = array_min[cpt];
+//                                        collapseBody += key + ', ';
+//                                    }
+//                                    collapseBody += '</div>';
                                     break;
                             }
                         }
