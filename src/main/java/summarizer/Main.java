@@ -107,8 +107,8 @@ public class Main {
         HashMap<String, HashMap<String, List<Object>>> dataFiltered = filter.filtre(pcm);
         
         // Export
-        File resumeFile = new File("src/main/java/IHM/public_html/json/summarizer.json"); //fichier cible
-        JsonExport exporter = new JsonExport();
+        File resumeFile = new File("src/main/java/IHM/public_html/json/summarizer.js"); //fichier cible
+        JsExport exporter = new JsExport();
         exporter.export(dataFiltered, resumeFile);
         
     }        

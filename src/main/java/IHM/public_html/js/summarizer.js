@@ -61,13 +61,13 @@ function numbersResume(resumeData){
 	var min = resumeData.min;
 	var ecart = resumeData.ecartType;
 
-	var resume = '<div>La moyenne des valeurs est de <span class="data">'
+	var resume = '<div>The value average is <span class="data">'
 			+ moyenne.toFixed(2)
-			+ '</span> avec un écart type de <span class="data">'
+			+ '</span> with a standard deviation of <span class="data">'
 			+ ecart.toFixed(2) 
-			+ '</span>, un maximum de <span class="data">'
+			+ '</span>, a maximum value of <span class="data">'
 			+ max 
-			+'</span> et un minimum de <span class="data">'
+			+'</span> and a minimum value of <span class="data">'
 			+ min + '</span></div>'
 			
 	return resume;
@@ -80,7 +80,7 @@ function numbersResume(resumeData){
 function booleansResume(resumeData){
 	var pourcentage = resumeData.pourcentage;
 	var array = Object.keys(pourcentage);
-	var resume = '<div>Le feature présente les valeurs suivantes: ';
+	var resume = '<div>The feature has the following values: ';
 	
 	for (cpt = 0; cpt < array.length; cpt++) {
 		var key = array[cpt];
@@ -98,7 +98,7 @@ function booleansResume(resumeData){
  */
 function notAvailablesResume(pourcentageType){
 	var resume = '<div> <span class="data">' + pourcentageType.toFixed(2)
-			+ ' %</span> des valeurs ne sont pas renseignées</div>';
+			+ ' %</span> of values ??are not given</div>';
 	
 	return resume;
 }
@@ -114,16 +114,16 @@ function stringValuesResume(resumeData){
 	if(typeof max !== "undefined"){
 		var array_max = Object.keys(max);
 		if(array_max.length > 1){
-			resume += '<div>Les valeurs les plus representées avec un pourcentage de <span class="data">'
-				+ max[array_max[0]].toFixed(2) + '%</span> sont: </br>';
+			resume += '<div>The most represented values with a percentage of <span class="data">'
+				+ max[array_max[0]].toFixed(2) + '%</span> are: </br>';
 			for (cpt = 0; cpt < array_max.length; cpt++) {
 				var key = array_max[cpt];
 				resume += key + ', ';
 			}
 		}
 		else{
-			resume += '<div>La valeur la plus representée avec un pourcentage de <span class="data">'
-				+ max[array_max[0]].toFixed(2) + '%</span> est: </br>';
+			resume += '<div>The most represented value with a percentage of <span class="data">'
+				+ max[array_max[0]].toFixed(2) + '%</span> is: </br>';
 			resume += array_max[0];
 		}
 		
@@ -134,16 +134,16 @@ function stringValuesResume(resumeData){
 	if(typeof min !== "undefined"){
 		var array_min = Object.keys(min);
 		if(array_min.length > 1){
-			resume += '<div>Les valeurs les moins representées avec un pourcentage de <span class="data">'
-				+ min[array_min[0]].toFixed(2) + '%</span> sont: </br>';
+			resume += '<div>The least represented values with a percentage of <span class="data">'
+				+ min[array_min[0]].toFixed(2) + '%</span> aare: </br>';
 			for (cpt = 0; cpt < array_min.length; cpt++) {
 				var key = array_min[cpt];
 				resume += key + ', ';
 			}			
 		}
 		else{
-			resume += '<div>La valeur la moins representée avec un pourcentage de <span class="data">'
-				+ min[array_min[0]].toFixed(2) + '%</span> est: </br>';
+			resume += '<div>The least represented value with a percentage of <span class="data">'
+				+ min[array_min[0]].toFixed(2) + '%</span> is: </br>';
 			resume += array_min[0];
 		}
 		
@@ -151,7 +151,7 @@ function stringValuesResume(resumeData){
 	}
 	
 	if(resume.length == 0){
-		resume += 'Les valeurs sont toutes distinctes.';
+		resume += 'The values ??are all different';
 	}
 	
 	return resume;

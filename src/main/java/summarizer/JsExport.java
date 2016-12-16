@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author NOYAF-PC
  */
-public class JsonExport {
+public class JsExport {
     
     StringBuilder builder;
     Regle rule;
@@ -24,20 +24,20 @@ public class JsonExport {
      * Constructeur
      * Instancie un string builder et une règle
      */
-    public JsonExport(){
+    public JsExport(){
         builder = new StringBuilder("");
         rule = new Regle();
     }
     
     /**
-     * Copie le resultat du formattage en Json dans le fichier spécifié
+     * Copie le resultat du formattage en Js dans le fichier spécifié
      * 
      * @param listeFeatures Données à formater puis à sauvegarder
      * @param resumeFile Fichier cible pour la sauvegarde des données
      * @throws IOException 
      */
     public void export(HashMap<String, HashMap<String, List<Object>>> listeFeatures, File resumeFile) throws IOException{
-        String dataFormated = toJson(listeFeatures);
+        String dataFormated = toJs(listeFeatures);
         saveTo(dataFormated, resumeFile);
         System.out.println("Resumé généré !");
         System.out.println("Vous pourrez le visualiser en ouvrant le fichier à l'emplacement suivant:");
@@ -45,12 +45,12 @@ public class JsonExport {
     }
     
     /**
-     * Format la HashMap fournit en Json
+     * Format la HashMap fournit en Js
      * 
      * @param listeFeatures HashMap contenant une liste de features
-     * @return Chaine de caractère au format Json
+     * @return Chaine de caractère au format Js
      */
-    private String toJson(HashMap<String, HashMap<String, List<Object>>> listeFeatures){
+    private String toJs(HashMap<String, HashMap<String, List<Object>>> listeFeatures){
     	//Déclaration de la variable JavaScript
     	builder.append("var summarizerData = ");
     	
@@ -65,7 +65,7 @@ public class JsonExport {
             builder.append("{\"nom\": \"").append(nomFeature).append("\",");
             builder.append("\"types\": [ ");
             
-            listeFeatureCellsToJson(listeFeatureCells, TotalFeatureCells);
+            listeFeatureCellsToJs(listeFeatureCells, TotalFeatureCells);
             
             builder.deleteCharAt(builder.lastIndexOf(","));
             builder.append("]"); //EndTypes            
@@ -78,12 +78,12 @@ public class JsonExport {
     
     /**
      * Applique les règles nécessaire à l'édition du resumé selon le sous domaine en présence
-     * et formate le resultat en Json
+     * et formate le resultat en Js
      * 
      * @param listes Ensemble des listes des différents type composant le feature
      * @param TotalFeatureCells Nombre total de cellule du feature
      */
-    private void listeFeatureCellsToJson(HashMap<String, List<Object>> listes, int TotalFeatureCells){
+    private void listeFeatureCellsToJs(HashMap<String, List<Object>> listes, int TotalFeatureCells){
         for(String key: listes.keySet()){
             String nomSousDomaine = key;
             List<Object> sousDomaine = listes.get(key);
