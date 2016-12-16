@@ -18,6 +18,7 @@ import org.opencompare.api.java.PCM;
 import org.opencompare.api.java.PCMContainer;
 import org.opencompare.api.java.impl.io.KMFJSONLoader;
 import org.opencompare.api.java.io.PCMLoader;
+import org.opencompare.model.impl.PCMImpl;
 
 /**
  *
@@ -41,41 +42,65 @@ public class Main {
         List<PCMContainer> pcmContainers = loader.load(pcmFile);        
         PCM pcm = pcmContainers.get(0).getPcm(); //Récupère le PCM
         
-        //Afficher la liste des features
-        System.out.println("Veuillez entrer le numero des features sur lesquels vous voulez votre resumé (ex: 1,2,5) puis validez : ");
-        HashMap<Integer, Feature> listeFeatures = new HashMap<>();
-        int cpt = 0;
-        for (Feature feature : pcm.getConcreteFeatures()) {
-        	cpt++;
-        	listeFeatures.put(cpt, feature);
-        	System.out.println(cpt + ") "+ feature.getName());
+        //Recupération de la saisie de l'utilisateur concernant le choix de features particuliers
+        String userChoice;
+        do{
+            System.out.println("Avez-vous des choix de features particuliers ? (O/N) ");
+            //Recupérer le choix de l'utilisateur
+            userChoice = sc.nextLine();
         }
-        System.out.println("Si vous n'avez pas de choix particulier, validez sans rien saisir ! ");
+        while(!userChoice.equals("O") && !userChoice.equals("o") && !userChoice.equals("N") && !userChoice.equals("n"));
         
-        //Recupérer le choix de l'utilisateur
-        String choix = sc.nextLine();
-        List<Integer> listeDesChoix = new ArrayList<>();
-        for(String s: choix.split(",")){
-        	listeDesChoix.add(Integer.parseInt(s));
+        /* 
+         * Si le choix est "O",
+         * recupérer le choix de l'utilisateur et
+         * supprimer les features non choisis du PCM        
+         */
+        if(userChoice.equals("O") || userChoice.equals("o")){
+            //Afficher la liste des features
+            System.out.println("Liste des features");
+            HashMap<Integer, Feature> listeFeatures = new HashMap<>();
+            int featCpt = 0;
+            for (Feature feature : pcm.getConcreteFeatures()) {
+            	featCpt++;
+            	listeFeatures.put(featCpt, feature);
+            	System.out.println(featCpt + ") "+ feature.getName());
+            }
+            
+            //Recupérer le choix de l'utilisateur
+            System.out.println("Veuillez saisir le numero du feature choisie puis validez pour en choisir un autre.");
+            System.out.println("Terminer en saisissant 'F'. ");
+            List<Integer> listeDesChoix = new ArrayList<>();
+            do{
+            	userChoice = sc.nextLine();
+            	if(!userChoice.equals("F") && !userChoice.equals("f")){
+            		listeDesChoix.add(Integer.parseInt(userChoice));
+            	}
+            }
+            while(!userChoice.equals("F") && !userChoice.equals("f"));
+            
+            if(listeDesChoix.size() > 0){
+                //Supprimer les features choisis par l'utilisateur de la liste
+                for(int i: listeDesChoix){
+                	listeFeatures.remove(i);
+                }
+                
+                //Supprimer les features restant du pcm
+                for(int key: listeFeatures.keySet()){
+                	pcm.removeFeature((AbstractFeature) listeFeatures.get(key));
+                }
+                
+                //Afficher les features selectionnés par l'utilisateur
+                System.out.println("Les features retenus sont: ");
+                for (Feature feature : pcm.getConcreteFeatures()) {
+                	System.out.println(feature.getName());
+                }
+            }
         }
         
-        //Selectionner les features à supprimer en supprimant ceux choisis de la liste
-        for(int i: listeDesChoix){
-        	listeFeatures.remove(i);
-        }
-        
-        //Supprimer les features du pcm
-        for(int key: listeFeatures.keySet()){
-        	pcm.removeFeature((AbstractFeature) listeFeatures.get(key));
-        }
-        
-        //Afficher les features selectionnés
-        System.out.println("Les features retenus sont: ");
-        int cp = 0;
-        for (Feature feature : pcm.getConcreteFeatures()) {
-        	cp++;
-        	System.out.println(cp + ") "+ feature.getName());
-        }
+        /*
+         * Filtre puis export du PCM
+         */
         
         //Filtre
         FiltreVisitor filter = new FiltreVisitor();
