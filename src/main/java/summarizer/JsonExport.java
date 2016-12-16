@@ -39,8 +39,9 @@ public class JsonExport {
     public void export(HashMap<String, HashMap<String, List<Object>>> listeFeatures, File resumeFile) throws IOException{
         String dataFormated = toJson(listeFeatures);
         saveTo(dataFormated, resumeFile);
-        System.out.println("Resumé généré ! \nVeuillez ouvrir le fichier à l'emplacement suivant:");
-        System.out.println("src/main/java/IHM/public_html/index.html/pcms/example.pcm");
+        System.out.println("Resumé généré !");
+        System.out.println("Vous pourrez le visualiser en ouvrant le fichier à l'emplacement suivant:");
+        System.out.println("src/main/java/IHM/public_html/index.html");
     }
     
     /**
@@ -50,6 +51,10 @@ public class JsonExport {
      * @return Chaine de caractère au format Json
      */
     private String toJson(HashMap<String, HashMap<String, List<Object>>> listeFeatures){
+    	//Déclaration de la variable JavaScript
+    	builder.append("var summarizerData = ");
+    	
+    	//Définition des données
         builder.append("{ \"features\": [ ");
         for(String key: listeFeatures.keySet()){
             String nomFeature = key;

@@ -40,7 +40,7 @@ public class Regle {
             float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
 
             builder.append("{\"type\": \"").append(nomSousDomaine).append("\",");
-            builder.append("\"porcentageType\": ").append(pourcentageSousDomaine).append(",");
+            builder.append("\"pourcentageType\": ").append(pourcentageSousDomaine).append(",");
             builder.append("\"resume\": {");                
 
             //Calcul du pourcentage
@@ -110,7 +110,7 @@ public class Regle {
             float ecartType = motif.ecartType(sousDomaine); //Calcul de l'écart type
 
             builder.append("{\"type\": \"").append(nomSousDomaine).append("\",");
-            builder.append("\"porcentageType\": ").append(pourcentageSousDomaine).append(",");
+            builder.append("\"pourcentageType\": ").append(pourcentageSousDomaine).append(",");
             builder.append("\"resume\": {");
 
             builder.append("\"moyenne\": ").append(moyenne).append(",");
@@ -143,7 +143,7 @@ public class Regle {
             float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
 
             builder.append("{\"type\": \"").append(nomSousDomaine).append("\",");
-            builder.append("\"porcentageType\": ").append(pourcentageSousDomaine).append(",");
+            builder.append("\"pourcentageType\": ").append(pourcentageSousDomaine).append(",");
             builder.append("\"resume\": {");                
 
             //Calcul du pourcentage
@@ -180,7 +180,7 @@ public class Regle {
             float pourcentageSousDomaine = (sousDomaine.size() / tailleDomaine ) * 100;
 
             builder.append("{\"type\": \"").append(nomSousDomaine).append("\",");
-            builder.append("\"porcentageType\": ").append(pourcentageSousDomaine);             
+            builder.append("\"pourcentageType\": ").append(pourcentageSousDomaine);             
             builder.append("},");
 
             return builder.toString();
