@@ -1,11 +1,12 @@
 $(function() {
+    // recupération et exploration du contenu du fichier summarizer
 	for (i = 0, l = summarizerData.features.length; i < l; i++) {
 		var feature = summarizerData.features[i];
 		var collapseHead = '';
 		var collapseFoot = '';
 		var collapseBody = '';
 		var collapse = '';
-
+//                construction de la zone d'affichage 
 		collapseHead += '<div class="panel panel-default">';
 		collapseHead += '<div class="panel-heading">';
 		collapseHead += '<h4 class="panel-title">';
@@ -21,11 +22,12 @@ $(function() {
 		collapseFoot += '</div></div></div></div>';
 
 		var types = feature.types;
+                // on parcours le contenu du feature par type
 		for (j = 0; j < types.length; j++) {
 			var type = types[j].type;
 			var resume = types[j].resume;
 			var pourcentageType = types[j].pourcentageType;
-			
+			// test sur le type du feature
 			switch (type) {
 			case "numbers":
 				collapseBody += numbersResume(resume);
@@ -53,16 +55,19 @@ $(function() {
 /**
  * 
  * @param resume
+ * contient le résumé à afficher pour le type numbersResume
  */
 function numbersResume(resumeData){
 	// afficher la moyenne
 	var moyenne = resumeData.moyenne;
+        // valeur max
 	var max = resumeData.max;
+        //valeur minimale
 	var min = resumeData.min;
 	var ecart = resumeData.ecartType;
-
+// construction du résumé
 	var resume = '<div>The value average is <span class="data">'
-			+ moyenne.toFixed(2)
+			+ moyenne.toFixed(2) // on arrondit au centième près
 			+ '</span> with a standard deviation of <span class="data">'
 			+ ecart.toFixed(2) 
 			+ '</span>, a maximum value of <span class="data">'
@@ -76,6 +81,7 @@ function numbersResume(resumeData){
 /**
  * 
  * @param resume
+ * contient le résumé à afficher pour le type booleansResume
  */
 function booleansResume(resumeData){
 	var pourcentage = resumeData.pourcentage;
@@ -95,6 +101,7 @@ function booleansResume(resumeData){
 /**
  * 
  * @param resume
+ * contient le résumé à affichage pour le type notAvailablesResume
  */
 function notAvailablesResume(pourcentageType){
 	var resume = '<div> <span class="data">' + pourcentageType.toFixed(2)
@@ -106,16 +113,21 @@ function notAvailablesResume(pourcentageType){
 /**
  * 
  * @param resume
+ * contient le résumé à afficher pour le type stringValuesResume
  */
 function stringValuesResume(resumeData){
 	var resume = '';
-	
+	//recuperation de la valeur maximale
 	var max = resumeData.max;
+        // nous verifions si elle est définie
 	if(typeof max !== "undefined"){
+            //recuperons la clé de la valeur max
 		var array_max = Object.keys(max);
+                //vérifions si plusieurs valeurs ont le pourcentage maximal
 		if(array_max.length > 1){
 			resume += '<div>The most represented values with a percentage of <span class="data">'
 				+ max[array_max[0]].toFixed(2) + '%</span> are: </br>';
+                        //recuperons les valeurs ayant le pourcentage maximal
 			for (cpt = 0; cpt < array_max.length; cpt++) {
 				var key = array_max[cpt];
 				resume += key + ', ';
@@ -151,7 +163,7 @@ function stringValuesResume(resumeData){
 	}
 	
 	if(resume.length == 0){
-		resume += 'The values ??are all different';
+		resume += 'The values are all different';
 	}
 	
 	return resume;
