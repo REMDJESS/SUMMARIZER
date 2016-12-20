@@ -12,12 +12,18 @@ We will classify the features by hierarchies from the least relevant to the most
 The reliable features to remember for the overall summary are the consistent and inconsistent features.
 
 ## Built With
-1-Maven - A build automation tool used primarily for Java projects
+1-Maven - A build automation tool used primarily for Java projects.
+
 2-JUnit - An open source framework designed for the purpose of writing and running tests in the Java programming language.
+
 3-QUnit - A powerful JavaScript unit testing framework that helps you to debug code.
+
 4-JavaScript - A high-level, dynamic, object-oriented scripting language, commonly known as the scripting language of web pages.
-5-Bootstrap - A free and open-source front-end web framework for designing websites and web applications
+
+5-Bootstrap - A free and open-source front-end web framework for designing websites and web applications.
+
 6-HTML (the Hypertext Markup Language) and CSS (Cascading Style Sheets): Two of the core technologies for building Web pages.
+
 7-GitHub - A Web hosting and management software development service, using Git version management software.
 
 ## The architecture of the project
