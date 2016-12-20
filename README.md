@@ -37,6 +37,28 @@ Building getting-started 0.7
 --- exec-maven-plugin:1.2.1:exec (default-cli) @ getting-started ---
 Veuillez saisir le chemin d'acces a votre fichier (ex: pcms/example.pcm) : 
 pcms/example.pcm
+Voulez vous une valeur de features particulières ? (O/N) 
+o
+Liste des features
+1) Viewfinder magnification
+2) Weight (g)
+3) Focus points
+4) LCD monitor
+5) ISO max (expanded)
+6) Image processor
+7) Sensor type
+8) Top continuous shooting speed (frames/sec)
+Veuillez saisir le numero du feature choisie puis validez.
+1
+Veuillez saisir votre valeur puis validez.
+Sony
+```
+
+
+## Choice of resume
+If you can generate the summary on all the features or some features
+
+```java
 Avez-vous des choix de features particuliers ? (O/N) 
 O
 Liste des features
@@ -75,6 +97,13 @@ Terminer en saisissant une lettre.
 9
 10
 n
+```
+
+## Choose a feature value
+
+If you want choose a feature's value .
+
+```java
 Voulez vous une valeur de features particulières ? (O/N) 
 o
 Liste des features
@@ -90,32 +119,9 @@ Veuillez saisir le numero du feature choisie puis validez.
 1
 Veuillez saisir votre valeur puis validez.
 Sony
-Resumé généré !
-Vous pourrez le visualiser en ouvrant le fichier à l'emplacement suivant:
-src/main/java/IHM/public_html/index.html
-```
-### Using a visitor
-See src/test/java/org.opencompare/VisitorTest.java
-
-## Export
-If we want to export or serialize the PCM to a specific format, we can use a PCMExporter.
-In this example, we export our PCM to a CSV file.
-
-```java
-CSVExporter csvExporter = new CSVExporter();
-String csv = csvExporter.export(pcmContainer);
-```
-
-## Import 
-
-If we want to import a PCM from a CSV file, we can use a CSVLoader.
-
-```java
-CSVLoader csvL = new CSVLoader(
-                new PCMFactoryImpl(),
-                new CellContentInterpreter(new PCMFactoryImpl()));
-List<PCMContainer> pcms = csvL.load(new File("pcms/pokemon.csv"));
 ...
 ```
+### runing the result
+src/main/java/IHM/public_html/index.html
 
 
