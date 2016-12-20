@@ -23,7 +23,7 @@ The reliable features to remember for the overall summary are the consistent and
 * [JQuery](https://jquery.com/)
 * [Bootstrap](http://getbootstrap.com/)
 
-## The architecture of the project
+## Licences
 OpenCompare licences
 ## The architecture of the project
 The project includes two packages: the summarizer package and the HMI package
