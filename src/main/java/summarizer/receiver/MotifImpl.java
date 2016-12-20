@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package summarizer;
+package summarizer.receiver;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -106,6 +106,4 @@ public class MotifImpl implements Motif{
         ecartType = (float) Math.sqrt(somme)/taille;
         return ecartType;
     }
-    
-    
 }

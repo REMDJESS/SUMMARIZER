@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?PowerDesigner AppLocale="UTF16" ID="{A5CECE37-773C-4DEB-9E7D-2164B0AAED85}" Label="" LastModificationDate="1481905248" Name="SUMMARIZER" Objects="62" Symbols="97" Target="Java" TargetLink="Reference" Type="{18112060-1A4B-11D1-83D9-444553540000}" signature="CLD_OBJECT_MODEL" version="15.1.0.2850"?>
+<?PowerDesigner AppLocale="UTF16" ID="{A5CECE37-773C-4DEB-9E7D-2164B0AAED85}" Label="" LastModificationDate="1481994348" Name="SUMMARIZER" Objects="59" Symbols="83" Target="Java" TargetLink="Reference" Type="{18112060-1A4B-11D1-83D9-444553540000}" signature="CLD_OBJECT_MODEL" version="15.1.0.2850"?>
 <!-- Veuillez ne pas modifier ce fichier -->
 
 <Model xmlns:a="attribute" xmlns:c="collection" xmlns:o="object">
@@ -2999,7 +2999,7 @@ Shadow=0</a:DisplayPreferences>
 <o:MessageSymbol Id="o87">
 <a:CreationDate>1481905223</a:CreationDate>
 <a:ModificationDate>1481905223</a:ModificationDate>
-<a:Rect>((18564,-27325), (23964,-25725))</a:Rect>
+<a:Rect>((18564,-27325), (22164,-25725))</a:Rect>
 <a:ListOfPoints>((18564,-25725),(22164,-25725),(22164,-27325),(18564,-27325))</a:ListOfPoints>
 <a:CornerStyle>2</a:CornerStyle>
 <a:ArrowStyle>8</a:ArrowStyle>
@@ -4213,7 +4213,7 @@ DISPNAME 0 Arial,8,N</a:FontList>
 <a:Code>Java</a:Code>
 <a:CreationDate>1481890367</a:CreationDate>
 <a:Creator>NOYAF-PC</a:Creator>
-<a:ModificationDate>1481890367</a:ModificationDate>
+<a:ModificationDate>1481994346</a:ModificationDate>
 <a:Modifier>NOYAF-PC</a:Modifier>
 <a:TargetModelURL>file:///%_OBJLANG%/java5-j2ee14.xol</a:TargetModelURL>
 <a:TargetModelID>0DEDDB90-46E2-45A0-886E-411709DA0DC9</a:TargetModelID>
@@ -4228,7 +4228,7 @@ DISPNAME 0 Arial,8,N</a:FontList>
 <a:Code>WSDLJava</a:Code>
 <a:CreationDate>1481890372</a:CreationDate>
 <a:Creator>NOYAF-PC</a:Creator>
-<a:ModificationDate>1481890372</a:ModificationDate>
+<a:ModificationDate>1481994348</a:ModificationDate>
 <a:Modifier>NOYAF-PC</a:Modifier>
 <a:TargetModelURL>file:///%_XEM%/WSDLJ2EE.xem</a:TargetModelURL>
 <a:TargetModelID>C8F5F7B2-CF9D-4E98-8301-959BB6E86C8A</a:TargetModelID>

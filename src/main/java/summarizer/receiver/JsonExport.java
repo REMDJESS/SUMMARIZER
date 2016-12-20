@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package summarizer;
+package summarizer.receiver;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -11,11 +11,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
+import org.opencompare.api.java.Cell;
+
 /**
  *
  * @author NOYAF-PC
  */
-public class JsExport {
+public class JsonExport {
     
     StringBuilder builder;
     Regle rule;
@@ -24,7 +26,7 @@ public class JsExport {
      * Constructeur
      * Instancie un string builder et une règle
      */
-    public JsExport(){
+    public JsonExport(){
         builder = new StringBuilder("");
         rule = new Regle();
     }
@@ -36,36 +38,33 @@ public class JsExport {
      * @param resumeFile Fichier cible pour la sauvegarde des données
      * @throws IOException 
      */
-    public void export(HashMap<String, HashMap<String, List<Object>>> listeFeatures, File resumeFile) throws IOException{
-        String dataFormated = toJs(listeFeatures);
+    public void export(HashMap<String, HashMap<String, List<Cell>>> listeFeatures, File resumeFile) throws IOException{
+        String dataFormated = toJson(listeFeatures);
         saveTo(dataFormated, resumeFile);
-        System.out.println("Resumé généré !");
-        System.out.println("Vous pourrez le visualiser en ouvrant le fichier à l'emplacement suivant:");
-        System.out.println("src/main/java/IHM/public_html/index.html");
     }
     
     /**
-     * Format la HashMap fournit en Js
+     * Formate la HashMap fournit en Json
      * 
      * @param listeFeatures HashMap contenant une liste de features
-     * @return Chaine de caractère au format Js
+     * @return Chaine de caractère au format Json
      */
-    private String toJs(HashMap<String, HashMap<String, List<Object>>> listeFeatures){
-    	//Déclaration de la variable JavaScript
+    public String toJson(HashMap<String, HashMap<String, List<Cell>>> listeFeatures){
+    	//Déclaration d'une variable JavaScript pour la éutilisation des données
     	builder.append("var summarizerData = ");
     	
     	//Définition des données
         builder.append("{ \"features\": [ ");
         for(String key: listeFeatures.keySet()){
             String nomFeature = key;
-            HashMap<String, List<Object>> listeFeatureCells = listeFeatures.get(key);
+            HashMap<String, List<Cell>> listeFeatureCells = listeFeatures.get(key);
             int TotalFeatureCells = getTotalFeatureCells(listeFeatureCells);
             
             //startFeature
             builder.append("{\"nom\": \"").append(nomFeature).append("\",");
             builder.append("\"types\": [ ");
             
-            listeFeatureCellsToJs(listeFeatureCells, TotalFeatureCells);
+            listeFeatureCellsToJson(listeFeatureCells, TotalFeatureCells);
             
             builder.deleteCharAt(builder.lastIndexOf(","));
             builder.append("]"); //EndTypes            
@@ -83,10 +82,10 @@ public class JsExport {
      * @param listes Ensemble des listes des différents type composant le feature
      * @param TotalFeatureCells Nombre total de cellule du feature
      */
-    private void listeFeatureCellsToJs(HashMap<String, List<Object>> listes, int TotalFeatureCells){
+    private void listeFeatureCellsToJson(HashMap<String, List<Cell>> listes, int TotalFeatureCells){
         for(String key: listes.keySet()){
             String nomSousDomaine = key;
-            List<Object> sousDomaine = listes.get(key);
+            List<Cell> sousDomaine = listes.get(key);
             
             switch(nomSousDomaine){
                 case "booleans": 
@@ -111,7 +110,7 @@ public class JsExport {
      * @param valuesCellsFeature
      * @return 
      */
-    private int getTotalFeatureCells(HashMap<String, List<Object>> valuesCellsFeature){
+    private int getTotalFeatureCells(HashMap<String, List<Cell>> valuesCellsFeature){
         int totalSize = 0;
         for(String key: valuesCellsFeature.keySet()){
             totalSize +=  valuesCellsFeature.get(key).size();
