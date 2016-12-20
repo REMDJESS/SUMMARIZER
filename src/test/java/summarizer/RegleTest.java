@@ -12,9 +12,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import summarizer.receiver.Regle;
-
 import static org.junit.Assert.*;
 
 /**
@@ -54,6 +51,7 @@ public class RegleTest {
             mySousDomaine.add("Quito");
             mySousDomaine.add("Lima");
            
+        
         System.out.println("StringRule");
 
         String nomMySousDomaine = "mySousDomaine";
