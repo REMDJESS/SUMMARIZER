@@ -15,10 +15,10 @@ The reliable features to remember for the overall summary are the consistent and
 1-Maven - A build automation tool used primarily for Java projects
 2-JUnit - An open source framework designed for the purpose of writing and running tests in the Java programming language.
 3-QUnit - A powerful JavaScript unit testing framework that helps you to debug code.
-3-JavaScript - A high-level, dynamic, object-oriented scripting language, commonly known as the scripting language of web pages.
-4-Bootstrap - A free and open-source front-end web framework for designing websites and web applications
-5-HTML (the Hypertext Markup Language) and CSS (Cascading Style Sheets): Two of the core technologies for building Web pages.
-6-GitHub - A Web hosting and management software development service, using Git version management software.
+4-JavaScript - A high-level, dynamic, object-oriented scripting language, commonly known as the scripting language of web pages.
+5-Bootstrap - A free and open-source front-end web framework for designing websites and web applications
+6-HTML (the Hypertext Markup Language) and CSS (Cascading Style Sheets): Two of the core technologies for building Web pages.
+7-GitHub - A Web hosting and management software development service, using Git version management software.
 
 ## The architecture of the project
 The project includes two packages: the summarizer package and the HMI package
@@ -28,21 +28,71 @@ Tests were performed for both treatments in Java with JUnit and JS with QUnit.
 
 ### Using the API
 ```java
-// Browse the cells of the PCM
-for (Product product : pcm.getProducts()) {
-  for (Feature feature : pcm.getConcreteFeatures()) {
-    // Find the cell corresponding to the current feature and product
-    Cell cell = product.findCell(feature);
+Scanning for projects...
+                                                                        
+------------------------------------------------------------------------
+Building getting-started 0.7
+------------------------------------------------------------------------
 
-    // Get information contained in the cell
-    String content = cell.getContent();
-    String rawContent = cell.getRawContent();
-    Value interpretation = cell.getInterpretation();
-
-    // Print the content of the cell
-    System.out.println("(" + product.getName() + ", " + feature.getName() + ") = " + content);
-  }
-}
+--- exec-maven-plugin:1.2.1:exec (default-cli) @ getting-started ---
+Veuillez saisir le chemin d'acces a votre fichier (ex: pcms/example.pcm) : 
+pcms/example.pcm
+Avez-vous des choix de features particuliers ? (O/N) 
+O
+Liste des features
+1) Viewfinder magnification
+2) Weight (g)
+3) Focus points
+4) LCD monitor
+5) ISO max (expanded)
+6) ISO max
+7) GPS
+8) Image processor
+9) Sensor type
+10) Top continuous shooting speed (frames/sec)
+11) Sensor format
+12) ISO min (expanded)
+13) Viewfinder coverage
+14) Live view
+15) Megapixel
+16) Dimensions (mm)
+17) Metering pixels
+18) Sensor manufacturer
+19) Storage media
+20) Model
+21) Wifi
+22) ISO min
+23) Movie mode
+24) Release Date
+Veuillez saisir le numero du feature choisie puis validez pour en choisir un autre.
+Terminer en saisissant une lettre.
+1
+2
+3
+4
+5
+8
+9
+10
+n
+Voulez vous une valeur de features particulières ? (O/N) 
+o
+Liste des features
+1) Viewfinder magnification
+2) Weight (g)
+3) Focus points
+4) LCD monitor
+5) ISO max (expanded)
+6) Image processor
+7) Sensor type
+8) Top continuous shooting speed (frames/sec)
+Veuillez saisir le numero du feature choisie puis validez.
+1
+Veuillez saisir votre valeur puis validez.
+Sony
+Resumé généré !
+Vous pourrez le visualiser en ouvrant le fichier à l'emplacement suivant:
+src/main/java/IHM/public_html/index.html
 ```
 ### Using a visitor
 See src/test/java/org.opencompare/VisitorTest.java
