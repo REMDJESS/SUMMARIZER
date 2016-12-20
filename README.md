@@ -15,9 +15,12 @@ The reliable features to remember for the overall summary are the consistent and
 
 * [Eclipse] (https://eclipse.org/)
 * [Netbeans](http://netbeans.org/)
+
+## Technologies used
 * [JUnit] (http://junit.org/junit4/)
 * [QUnit](https://qunitjs.com/)
 * [Javascript] (https://www.javascript.com/)
+* [JQuery](https://jquery.com/)
 * [Bootstrap](http://getbootstrap.com/)
 
 ## The architecture of the project
