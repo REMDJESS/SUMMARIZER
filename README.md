@@ -1,29 +1,30 @@
-# Getting started with OpenCompare
+# Getting SUMMARIZER
 
-Examples for using OpenCompare API and services
+OpenCompare is a free software allowing the exploitation of the matrices of comparison coming from the web (Wikipedia, Best Buy ...).  This publisher is a project of the IRISA of the University of Rennes1.
+SUMMARIZER is a module of the Open Compare project of the IRISA laboratory of the University of Rennes 1. It allows to generate a summary from a PCM matrix entered by the user.
 
-## Import a PCM
-1- Define the file that you want to load.
+## Definition of abstract generation rules
+We will generate a summary making a comparison on the different features.  The features are grouped into four types of value:  Booleans, String, Not available and Numbers.
+We will classify the features by hierarchies from the least relevant to the most relevant
+-	Features composed of several types of interpretations (non-coherent features)
+-	Features composed only of the NotAvailable type and of another type (pseudo-coherent features).
+-	Features composed of a single type (coherent features).
+The reliable features to remember for the overall summary are the consistent and inconsistent features.
 
-2- Create a loader that can handle the file format. 
-In our example, we use the KMFJSONLoader which supports the internal representation of OpenCompare.
+## Built With
+1-Maven - A build automation tool used primarily for Java projects
+2-JUnit - An open source framework designed for the purpose of writing and running tests in the Java programming language.
+3-QUnit - A powerful JavaScript unit testing framework that helps you to debug code.
+3-JavaScript - A high-level, dynamic, object-oriented scripting language, commonly known as the scripting language of web pages.
+4-Bootstrap - A free and open-source front-end web framework for designing websites and web applications
+5-HTML (the Hypertext Markup Language) and CSS (Cascading Style Sheets): Two of the core technologies for building Web pages.
+6-GitHub - A Web hosting and management software development service, using Git version management software.
 
-3- Load the file. 
-A loader returns a list of PCM containers as a file may contain multiple PCMs.
-A PCM container encapsulates a PCM and its associated metadata (e.g. position of the products and features, source of the information, author of the PCM).
-
-4- Iterate over the PCM containers to get the loaded PCMs
-
-```java
-File pcmFile = new File("pcms/example.pcm");
-PCMLoader loader = new KMFJSONLoader();
-List<PCMContainer> pcmContainers = loader.load(pcmFile);
-for (PCMContainer pcmContainer : pcmContainers) {
-  PCM pcm = pcmContainer.getPcm();
-}
-```
-
-## Browse a PCM
+## The architecture of the project
+The project includes two packages: the summarizer package and the HMI package
+The package summarizer contains the java procedure for generating the summary in JS format.  It integrates Visitor and Command design patterns.
+The HTML is the package that processes the summary display in HTML format.
+Tests were performed for both treatments in Java with JUnit and JS with QUnit.
 
 ### Using the API
 ```java
