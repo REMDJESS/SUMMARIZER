@@ -130,9 +130,14 @@ public class FiltreVisitor implements PCMVisitor {
         //Nouvelle collection
         listeFeatures = new HashMap<>();
         
-        for (Feature feature: pcm.getConcreteFeatures()) {
-            feature.accept(this);
+//        for (Feature feature: pcm.getConcreteFeatures()) {
+//            feature.accept(this);
+//        }
+        
+        for(Product produit: pcm.getProducts()){
+        	produit.accept(this);
         }
+        
     }
     
     /**
@@ -156,7 +161,33 @@ public class FiltreVisitor implements PCMVisitor {
     public void visit(FeatureGroup fg) {}
 
     @Override
-    public void visit(Product prdct) {}
+    public void visit(Product prdct) {
+        //Parcour la liste des cellules du produit
+        for (Cell cell : prdct.getCells()) {
+            listes = new HashMap<>();
+            cell.accept(this);
+        	
+        	//Ajoute chaque cellule au feature correspondant dans la liste des features
+        	Feature cellFeature = cell.getFeature();
+        	if(listeFeatures.containsKey(cellFeature.getName())){
+        		for(String key: listes.keySet()){
+        			HashMap<String, List<Cell>> listeType = new HashMap<>();
+        			listeType = listeFeatures.get(cellFeature.getName());
+        			if(listeType.containsKey(key)){
+        				listeFeatures.get(cellFeature.getName()).get(key).add(cell);
+        			}
+        			else{
+                		List<Cell> liste = new ArrayList<>();
+                		liste.add(cell);
+        				listeFeatures.get(cellFeature.getName()).put(key, liste);
+        			}
+        		}
+        	}
+        	else{
+        		listeFeatures.put(cellFeature.getName(), listes);
+        	}
+        }
+    }
     
     /**
      * Ajoute la cellule dans la liste correspondant à son interpretation (type)
