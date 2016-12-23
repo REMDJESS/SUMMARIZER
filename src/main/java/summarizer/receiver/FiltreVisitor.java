@@ -72,7 +72,7 @@ public class FiltreVisitor implements PCMVisitor {
     /**
      * 
      * @param pcm
-     * @return Une HasMap des features contenant l'HashMap des cellules regroupées avec l'interpretation la plus representée
+     * @return Une HasMap des features contenant l'HashMap des cellules avec l'interpretation la plus representée
      */
     public HashMap<String, HashMap<String, List<Cell>>> filtreReduit(PCM pcm) {        
         pcm.accept(this);
@@ -142,7 +142,6 @@ public class FiltreVisitor implements PCMVisitor {
      */
     @Override
     public void visit(Feature ftr) {
-        //Nouvelle collection
         listes = new HashMap<>();
         
         for (Cell cell : ftr.getCells()) {        	

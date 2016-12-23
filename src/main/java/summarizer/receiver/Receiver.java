@@ -68,37 +68,8 @@ public class Receiver {
             	pcm.removeFeature((AbstractFeature) listeFeatures.get(key));
             }
         }		
-	}
-	
-	/**
-	 * Reduit le pcm en y supprimant les feature de manière aléatoire
-	 * 
-	 * @param featuresChooseList Liste des features retenus
-	 */
-	public void randomReduceFeature(){
-        List<Integer> featuresList = new ArrayList<>();
-        
-        FiltreVisitor filter = new FiltreVisitor();
-        HashMap<String, HashMap<String, List<Cell>>> dataFiltered = filter.filtreReduit(pcm);
-        
-        int featCpt = 0;
-        for (Feature feature : pcm.getConcreteFeatures()) {
-        	featCpt++;
-        	
-        	HashMap<String, List<Cell>> listeType = dataFiltered.get(feature.getName());
-        	for(String key: listeType.keySet()){
-	        	if(key.equals("booleans")){
-		        	featuresList.add(featCpt);
-	        	}
-        	}
-        	
-        	
-
-        	
-        }
-		
-		reduceFeature(featuresList);		
 	}	
+
 	/**
 	 * Reduit la liste des produits du PCM sur la base du choix des valeurs
 	 * particulières de certains features
@@ -148,4 +119,58 @@ public class Receiver {
         JsonExport exporter = new JsonExport();
         exporter.export(dataFiltered, resumeFile);		
 	}
+		
+	/**
+	 * Choisit les produits pour lesquels les valeurs des cellules de certain features sont egaux ou compris 
+	 * entre des valeurs prédéfini. Le choix des critères se fait sur un seul feature et selon un ordre de type
+	 * données:
+	 * booleans -> numbers -> stringValues -> multiples -> partials -> units 
+	 * -> versions -> notApplicables -> dimensions -> conditionals -> notAvailables
+	 */
+	public void randomChoose(){
+        Map<Feature, String> productsChoice = new HashMap<>();
+        
+        if(!chooseFeatureByType("booleans").isEmpty()){
+            //Ajoute le premier feature et la valeur YES aux critères des produits à choisir
+            productsChoice.put(chooseFeatureByType("booleans").get(0), "Yes");
+        }
+        else{
+            if(!chooseFeatureByType("numbers").isEmpty()){
+                //Ajoute le premier feature et la valeur moyenne aux critères des produits à choisir
+                productsChoice.put(chooseFeatureByType("numbers").get(0), "200");
+            }
+            else{
+                if(!chooseFeatureByType("stringValues").isEmpty()){
+                    //Ajoute le premier feature et la valeur moyenne aux critères des produits à choisir
+                    productsChoice.put(chooseFeatureByType("stringValues").get(0), "YES");
+                }
+            }
+        }
+        
+        reduceProduct(productsChoice);		
+	}
+	
+	/**
+	 * Retourne les features comprenant des cellules d'un type donnée
+	 * 
+	 * @param typeName Nom de l'interpretation/type souhaitée
+	 * @return Liste des features correspondant
+	 */
+	private List<Feature> chooseFeatureByType(String typeName){
+        FiltreVisitor filter = new FiltreVisitor();
+        HashMap<String, HashMap<String, List<Cell>>> dataFiltered = filter.filtreReduit(pcm);
+        List<Feature> listOfChoosedFeature = new ArrayList<>();
+        
+        for (Feature feature : pcm.getConcreteFeatures()) {
+        	HashMap<String, List<Cell>> listeType = dataFiltered.get(feature.getName());
+        	for(String key: listeType.keySet()){
+	        	if(key.equals(typeName)){
+	        		listOfChoosedFeature.add(feature);
+	        	}
+        	}
+        }
+		
+		return listOfChoosedFeature;		
+	}
+	
 }

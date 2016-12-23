@@ -1,70 +1,132 @@
-# Getting started with OpenCompare
+# Getting SUMMARIZER
 
-Examples for using OpenCompare API and services
+OpenCompare is a free software allowing the exploitation of the matrices of comparison coming from the web (Wikipedia, Best Buy ...).  This publisher is a project of the IRISA of the University of Rennes1.
+SUMMARIZER is a module of the Open Compare project of the IRISA laboratory of the University of Rennes 1. It allows to generate a summary from a PCM matrix entered by the user.
 
-## Import a PCM
-1- Define the file that you want to load.
+## Definition of abstract generation rules
+We will generate a summary making a comparison on the different features.  The features are grouped into four types of value:  Booleans, String, Not available and Numbers.
+We will classify the features by hierarchies from the least relevant to the most relevant
+-	Features composed of several types of interpretations (non-coherent features)
+-	Features composed only of the NotAvailable type and of another type (pseudo-coherent features).
+-	Features composed of a single type (coherent features).
+The reliable features to remember for the overall summary are the consistent and inconsistent features.
 
-2- Create a loader that can handle the file format. 
-In our example, we use the KMFJSONLoader which supports the internal representation of OpenCompare.
+## Development tools
 
-3- Load the file. 
-A loader returns a list of PCM containers as a file may contain multiple PCMs.
-A PCM container encapsulates a PCM and its associated metadata (e.g. position of the products and features, source of the information, author of the PCM).
+* [Eclipse] (https://eclipse.org/)
+* [Netbeans](http://netbeans.org/)
 
-4- Iterate over the PCM containers to get the loaded PCMs
+## Technologies used
+* [JUnit] (http://junit.org/junit4/)
+* [QUnit](https://qunitjs.com/)
+* [Javascript] (https://www.javascript.com/)
+* [JQuery](https://jquery.com/)
+* [Bootstrap](http://getbootstrap.com/)
 
-```java
-File pcmFile = new File("pcms/example.pcm");
-PCMLoader loader = new KMFJSONLoader();
-List<PCMContainer> pcmContainers = loader.load(pcmFile);
-for (PCMContainer pcmContainer : pcmContainers) {
-  PCM pcm = pcmContainer.getPcm();
-}
-```
-
-## Browse a PCM
+## Licences
+OpenCompare licences
+## The architecture of the project
+The project includes two packages: the summarizer package and the HMI package
+The package summarizer contains the java procedure for generating the summary in JS format.  It integrates Visitor and Command design patterns.
+The HTML is the package that processes the summary display in HTML format.
+Tests were performed for both treatments in Java with JUnit and JS with QUnit.
 
 ### Using the API
 ```java
-// Browse the cells of the PCM
-for (Product product : pcm.getProducts()) {
-  for (Feature feature : pcm.getConcreteFeatures()) {
-    // Find the cell corresponding to the current feature and product
-    Cell cell = product.findCell(feature);
+Scanning for projects...
+                                                                        
+------------------------------------------------------------------------
+Building getting-started 0.7
+------------------------------------------------------------------------
 
-    // Get information contained in the cell
-    String content = cell.getContent();
-    String rawContent = cell.getRawContent();
-    Value interpretation = cell.getInterpretation();
-
-    // Print the content of the cell
-    System.out.println("(" + product.getName() + ", " + feature.getName() + ") = " + content);
-  }
-}
-```
-### Using a visitor
-See src/test/java/org.opencompare/VisitorTest.java
-
-## Export
-If we want to export or serialize the PCM to a specific format, we can use a PCMExporter.
-In this example, we export our PCM to a CSV file.
-
-```java
-CSVExporter csvExporter = new CSVExporter();
-String csv = csvExporter.export(pcmContainer);
+--- exec-maven-plugin:1.2.1:exec (default-cli) @ getting-started ---
+Veuillez saisir le chemin d'acces a votre fichier (ex: pcms/example.pcm) : 
+pcms/example.pcm
+Voulez vous une valeur de features particulières ? (O/N) 
+o
+Liste des features
+1) Viewfinder magnification
+2) Weight (g)
+3) Focus points
+4) LCD monitor
+5) ISO max (expanded)
+6) Image processor
+7) Sensor type
+8) Top continuous shooting speed (frames/sec)
+Veuillez saisir le numero du feature choisie puis validez.
+1
+Veuillez saisir votre valeur puis validez.
+Sony
 ```
 
-## Import 
 
-If we want to import a PCM from a CSV file, we can use a CSVLoader.
+## Choice of resume
+If you can generate the summary on all the features or some features
 
 ```java
-CSVLoader csvL = new CSVLoader(
-                new PCMFactoryImpl(),
-                new CellContentInterpreter(new PCMFactoryImpl()));
-List<PCMContainer> pcms = csvL.load(new File("pcms/pokemon.csv"));
+Avez-vous des choix de features particuliers ? (O/N) 
+O
+Liste des features
+1) Viewfinder magnification
+2) Weight (g)
+3) Focus points
+4) LCD monitor
+5) ISO max (expanded)
+6) ISO max
+7) GPS
+8) Image processor
+9) Sensor type
+10) Top continuous shooting speed (frames/sec)
+11) Sensor format
+12) ISO min (expanded)
+13) Viewfinder coverage
+14) Live view
+15) Megapixel
+16) Dimensions (mm)
+17) Metering pixels
+18) Sensor manufacturer
+19) Storage media
+20) Model
+21) Wifi
+22) ISO min
+23) Movie mode
+24) Release Date
+Veuillez saisir le numero du feature choisie puis validez pour en choisir un autre.
+Terminer en saisissant une lettre.
+1
+2
+3
+4
+5
+8
+9
+10
+n
+```
+
+## Choose a feature value
+
+If you want choose a feature's value .
+
+```java
+Voulez vous une valeur de features particulières ? (O/N) 
+o
+Liste des features
+1) Viewfinder magnification
+2) Weight (g)
+3) Focus points
+4) LCD monitor
+5) ISO max (expanded)
+6) Image processor
+7) Sensor type
+8) Top continuous shooting speed (frames/sec)
+Veuillez saisir le numero du feature choisie puis validez.
+1
+Veuillez saisir votre valeur puis validez.
+Sony
 ...
 ```
+### runing the result
+src/main/java/IHM/public_html/index.html
 
 

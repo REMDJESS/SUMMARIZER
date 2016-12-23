@@ -178,8 +178,17 @@ public class IHM {
             
             this.userProductsChoice.put(feature, featValue);
             invoke("trierProduit");
-        }        
+        }
 		
+	}
+
+	/**
+	 * Exécute la commande de choix aleatoire des feature
+	 */
+	public void randomFeatureChoose(){
+		if(this.userListFeatures.isEmpty() && this.userProductsChoice.isEmpty()){
+			invoke("randomFeatureChoose");
+		}
 	}
 	
 	/**

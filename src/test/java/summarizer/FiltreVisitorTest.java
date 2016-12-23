@@ -18,6 +18,7 @@ import org.opencompare.api.java.PCM;
 import org.opencompare.api.java.PCMContainer;
 import org.opencompare.api.java.impl.io.KMFJSONLoader;
 import org.opencompare.api.java.io.PCMLoader;
+import summarizer.receiver.FiltreVisitor;
 
 /**
  *

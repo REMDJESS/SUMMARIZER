@@ -96,8 +96,8 @@ QUnit.test("TestBoolean", function (assert) {
             }
         ]
     };
-    
-   
+
+
     // verifions le nom du feature
     var feature = resumeBoolean.features[0];
     assert.equal(resumeBoolean.features[0].nom, "Live view", "le nom feature est exact");
@@ -115,14 +115,100 @@ QUnit.test("TestBoolean", function (assert) {
     var pourcentage = resume.pourcentage;
     var array = Object.keys(pourcentage);
     // la premierse clé du tableau pourcentage
-    var key_1= array[0];
+    var key_1 = array[0];
     // le contenu de cette clé
-    var value_key_1= pourcentage[key_1].toFixed(2);
-    assert.equal(value_key_1, "39.53", "le pourcentage de la valeur booleenne est  "+key_1+" est exacte");
+    var value_key_1 = pourcentage[key_1].toFixed(2);
+    assert.equal(value_key_1, "39.53", "le pourcentage de la valeur booleenne est  " + key_1 + " est exacte");
     // la premierse clé du tableau pourcentage
-    var key_2= array[1];
+    var key_2 = array[1];
     // le contenu de cette clé et on aarondit au centième près
-    var value_key_2= pourcentage[key_1].toFixed(2);
-    assert.equal(value_key_2, "39.53", "le pourcentage de la valeur booleenne  "+key_2+" est exacte");
+    var value_key_2 = pourcentage[key_1].toFixed(2);
+    assert.equal(value_key_2, "39.53", "le pourcentage de la valeur booleenne  " + key_2 + " est exacte");
+
+});
+
+QUnit.test("TestNumber", function (assert) {
+// test data
+    var resumeNumber = {"features": [{
+                "nom": "Metering pixels",
+                "types": [{
+                        "type": "numbers",
+                        "pourcentageType": 100.0,
+                        "resume": {
+                            "moyenne": 11517.884,
+                            "max": 91000.00,
+                            "productWithMax": ["D2Hs", "D50", "D2H", "D40", "D1H", "D100", "D70s", "D1", "D70"],
+                            "min": 420.0,
+                             "productWithMin": ["D810"],
+                            "ecartType": 244.48567
+                        }
+                    }
+                ]
+            }
+        ]
+    };
+
+
+    // verifions le nom du feature
+    var feature = resumeNumber.features[0];
+    assert.equal(resumeNumber.features[0].nom, "Metering pixels", "le nom feature est exact");
+    //verifion le type
+    var types = feature.types[0];
+    var valeurType = types.type;
+    assert.equal(valeurType, "numbers", "le feature est de type numbers");
+    console.log(valeurType);
+    //verifions la valeur du pourcentage
+    var pourcentageType = types.pourcentageType;
+    console.log(pourcentageType);
+    assert.equal(pourcentageType, "100", "le pourcentage est exact");
+    // verifions le contenu du resumé
+    var resume = types.resume;
+    var moyenne = resume.moyenne.toFixed(2)
+    var min = resume.min;
+    var productMin = resume. productWithMin;
+    var produitsMin= ["D810"];
+    var max = resume.max.toFixed(2);
+    var productMax = resume.productWithMax;
+    var produitsMax = ["D2Hs", "D50", "D2H", "D40", "D1H", "D100", "D70s", "D1", "D70"];
+    var ecartType = resume.ecartType.toFixed(2);
+
+    assert.equal(moyenne, "11517.88", "la moyenne est exacte  ");
+    assert.equal(min, "420.0", "la valeur minimale  est exacte  ");
+    assert.deepEqual(productMin,produitsMin , "les produits du max sint exacts ");
+    assert.equal(max, "91000.00", "la valeur maximale est exacte  ");
+    assert.deepEqual(productMax,produitsMax , "les produits du max sint exacts ");
+    assert.equal(ecartType, "244.49", "l'ecart-type est exact  ");
+
+});
+
+QUnit.test("TestNotAvailables", function (assert) {
+// test data
+    var resumeNotAvailables = {"features": [{
+                "nom": "GPS",
+                "types": [{
+                        "type": "notAvailables",
+                        "pourcentageType": 97.674416,
+                        "resume": {
+                            "pourcentage": {
+                                "-": 100.0
+                            }
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    // verifions le nom du feature
+    var feature = resumeNotAvailables.features[0];
+    assert.equal(resumeNotAvailables.features[0].nom, "GPS", "le nom feature est exact");
+    //verifion le type
+    var types = feature.types[0];
+    var valeurType = types.type;
+    assert.equal(valeurType, "notAvailables", "le feature est de type notAvailables");
   
+    //verifions la valeur du pourcentage
+    var pourcentageType = types.pourcentageType.toFixed(2);
+  
+    assert.equal(pourcentageType, "97.67", " 97.67 des valeurs ne sont pas renseignés");
+    // verifions le contenu du resumé
 });
