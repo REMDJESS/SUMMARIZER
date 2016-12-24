@@ -5,14 +5,27 @@
  */
 package summarizer;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.opencompare.api.java.Cell;
+import org.opencompare.api.java.PCM;
+import org.opencompare.api.java.PCMContainer;
+import org.opencompare.api.java.impl.io.KMFJSONLoader;
+import org.opencompare.api.java.io.PCMLoader;
+
 import static org.junit.Assert.*;
+
+import summarizer.receiver.FiltreVisitor;
 import summarizer.receiver.Regle;
 
 /**
@@ -20,12 +33,21 @@ import summarizer.receiver.Regle;
  * @author AVF
  */
 public class RegleTest {
-    
+	
+	static HashMap<String, HashMap<String, List<Cell>>> dataFiltred;
+	Regle myRegle = new Regle();
+	
     public RegleTest() {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws IOException {
+        // Définition du chemin d'accès au fichier pcm à manipuler
+        File pcmFile = new File("pcms/model/Comparison_of_Macintosh_models_1.pcm");
+        
+        List<PCMContainer> pcmContainers = (new KMFJSONLoader()).load(pcmFile);        
+        PCM pcm = pcmContainers.get(0).getPcm(); //Récuperation du PCM
+        dataFiltred = (new FiltreVisitor()).filtreReduit(pcm); //Recuperation de l'ensemble des données de test
     }
     
     @AfterClass
@@ -45,41 +67,42 @@ public class RegleTest {
      */
     @Test
     public void testStringRule() {
-        
-        Collection<String> mySousDomaine = new ArrayList<>();
-            mySousDomaine.add("LaPaz");
-            mySousDomaine.add("Santiago");
-            mySousDomaine.add("Quito");
-            mySousDomaine.add("Lima");
-           
-        
-        System.out.println("StringRule");
+    	           
+    	//Recupération des données de test
+    	HashMap<String, List<Cell>> dataString = dataFiltred.get("Model");
+    	List<Cell> mySousDomaine = dataString.get("stringValues");
 
-        String nomMySousDomaine = "mySousDomaine";
-        float tailleDomaine = 4.0F;
+        String nomMySousDomaine = "stringValues";
+        float tailleDomaine = 15.0F;
         
-        Regle myRegle = new Regle();
-        
-    /************** chargement du résultat attendu **********************/     
+        /************** chargement du résultat attendu ****************/     
         StringBuilder builder = new StringBuilder();
-            builder.append("{\"type\": \"mySousDomaine\",");
-            builder.append("\"porcentageType\": 100.0,");
+            builder.append("{\"type\": \"stringValues\",");
+            builder.append("\"pourcentageType\": 100.0,");
             builder.append("\"resume\": {");                
             builder.append("\"pourcentage\": {");
-            builder.append("\"Santiago\": 25.0,");
-            builder.append("\"Lima\": 25.0,");
-            builder.append("\"LaPaz\": 25.0,");
-            builder.append("\"Quito\": 25.0");
+            builder.append("\"Mac Pro Quad-Core\": 6.666667,");
+            builder.append("\"iMac 21.5 in low-end\": 6.666667,");
+            builder.append("\"MacBook Air 1.7Â GHz\": 6.666667,");
+            builder.append("\"Mac mini Server\": 6.666667,");
+            builder.append("\"MacBook Pro 15 in 2.0Â GHz\": 6.666667,");
+            builder.append("\"Mac Pro 12-Core\": 6.666667,");
+            builder.append("\"MacBook Pro 13 in 2.3Â GHz\": 6.666667,");
+            builder.append("\"MacBook Air 1.6Â GHz\": 6.666667,");
+            builder.append("\"iMac 27 in high-end\": 6.666667,");
+            builder.append("\"iMac 27 in low-end\": 6.666667,");
+            builder.append("\"Mac mini\": 6.666667,");
+            builder.append("\"MacBook Pro 15 in 2.2Â GHz\": 6.666667,");
+            builder.append("\"MacBook Pro 13 in 2.7Â GHz\": 6.666667,");
+            builder.append("\"iMac 21.5 in high-end\": 6.666667,");
+            builder.append("\"Mac Pro 8-Core\": 6.666667");
             builder.append("}");            
             builder.append("}");
             builder.append("},");
         String expResult = builder.toString();
-        
         String result = myRegle.StringRule(mySousDomaine, nomMySousDomaine, tailleDomaine);
         
-        assertEquals(expResult, result);
-        
-       
+        assertEquals("String rule", expResult, result);
     }
 
     /**
@@ -88,34 +111,30 @@ public class RegleTest {
     @Test
     public void testNumberRule() {
         
-        System.out.println("testNumberRule");
+    	//Recupération des données de test
+    	HashMap<String, List<Cell>> dataString = dataFiltred.get("USB");
+    	List<Cell> mySousDomaine = dataString.get("numbers");
+    
+        String nomMySousDomaine = "numbers";
+        float tailleDomaine = 15.0f;
         
-        Collection<Float> mySousDomaine = new ArrayList<>();
-                mySousDomaine.add(12.5f);
-                mySousDomaine.add(18.20f);
-                mySousDomaine.add(40.50f);
-                mySousDomaine.add(444.25F);
-    
-        String nomMySousDomaine = "mySousDomaine";
-        float tailleDomaine = 4.0f;
-
-        Regle myRegle = new Regle();
-    
         /************** chargement du résultat attendu **********************/     
         StringBuilder builder = new StringBuilder();
-            builder.append("{\"type\": \"mySousDomaine\",");
-            builder.append("\"porcentageType\": 100.0,");
+            builder.append("{\"type\": \"numbers\",");
+            builder.append("\"pourcentageType\": 100.0,");
             builder.append("\"resume\": {");                
-            builder.append("\"moyenne\": 128.8625,");
-            builder.append("\"max\": 444.25,");
-            builder.append("\"min\": 12.5,");
-            builder.append("\"ecartType\": 78.84688");
+            builder.append("\"moyenne\": 3.4,");
+            builder.append("\"max\": 5.0,");
+            builder.append("\"productWithMax\": [\"Mac Pro Quad-Core\",\"Mac Pro 8-Core\",\"Mac Pro 12-Core\"],");
+            builder.append("\"min\": 2.0,");
+            builder.append("\"productWithMin\": [\"MacBook Air 1.7Â GHz\",\"MacBook Pro 15 in 2.0Â GHz\",\"MacBook Pro 15 in 2.2Â GHz\",\"MacBook Pro 13 in 2.3Â GHz\",\"MacBook Pro 13 in 2.7Â GHz\",\"MacBook Air 1.6Â GHz\"],");
+            builder.append("\"ecartType\": 0.039999995");
             builder.append("}");            
             builder.append("},");
         String expResult = builder.toString();
 
         String result = myRegle.numberRule(mySousDomaine, nomMySousDomaine, tailleDomaine);
-        assertEquals(expResult, result);
+        assertEquals("Numbers rule", expResult, result);
         
         
     }
@@ -126,26 +145,20 @@ public class RegleTest {
     @Test
     public void testBooleanRule() {
         
-       System.out.println("booleanRule");
-       
-        Collection<Boolean> mySousDomaine = new ArrayList<>();
-                mySousDomaine.add(true);
-                mySousDomaine.add(false);
-                mySousDomaine.add(true);
-                mySousDomaine.add(false);
+    	//Recupération des données de test
+    	HashMap<String, List<Cell>> dataString = dataFiltred.get("AirPort Extreme");
+    	List<Cell> mySousDomaine = dataString.get("booleans");
     
-        String nomMySousDomaine = "mySousDomaine";
-        float tailleDomaine = 4.0f;
+        String nomMySousDomaine = "booleans";
+        float tailleDomaine = 15.0f;
 
-        Regle myRegle = new Regle();
-    
         /************** chargement du résultat attendu **********************/
         StringBuilder builder = new StringBuilder();
-            builder.append("{\"type\": \"mySousDomaine\",");
-            builder.append("\"porcentageType\": 100.0");
+            builder.append("{\"type\": \"booleans\",");
+            builder.append("\"pourcentageType\": 100.0,");
             builder.append("\"resume\": {");
             builder.append("\"pourcentage\": ");
-            builder.append("{}");
+            builder.append("{\"Yes\": 100.0}");
             builder.append("}");
             builder.append("},");
         String expResult = builder.toString();
@@ -163,29 +176,8 @@ public class RegleTest {
     public void testNotApplicableRule() {
         
         
-    System.out.println("notApplicableRule");
-      
-     Collection<String> mySousDomaine = new ArrayList<>();
-                mySousDomaine.add("-");
-                mySousDomaine.add("_");
-                mySousDomaine.add("");
-    
-        String nomMySousDomaine = "mySousDomaine";
-        float tailleDomaine = 4.0f;
-
-        Regle myRegle = new Regle();
-    
-        /************** chargement du résultat attendu **********************/
-        StringBuilder builder = new StringBuilder();
-            builder.append("{\"type\": \"mySousDomaine\",");
-            builder.append("\"porcentageType\": 75.0");
-            builder.append("},");
-        String expResult = builder.toString();
-    
-        String result = myRegle.notApplicableRule(mySousDomaine, nomMySousDomaine, tailleDomaine);
-        assertEquals(expResult, result);
-        
-       
+	    System.out.println("notApplicableRule");
+ 
         
     } 
     
