@@ -5,10 +5,10 @@
  */
 package summarizer;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,9 +21,6 @@ import org.opencompare.api.java.Cell;
 import org.opencompare.api.java.PCM;
 import org.opencompare.api.java.PCMContainer;
 import org.opencompare.api.java.impl.io.KMFJSONLoader;
-import org.opencompare.api.java.io.PCMLoader;
-
-import static org.junit.Assert.*;
 
 import summarizer.receiver.FiltreVisitor;
 import summarizer.receiver.Regle;
