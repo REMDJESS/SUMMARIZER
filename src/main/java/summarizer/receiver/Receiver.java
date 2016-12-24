@@ -131,18 +131,47 @@ public class Receiver {
         Map<Feature, String> productsChoice = new HashMap<>();
         
         if(!chooseFeatureByType("booleans").isEmpty()){
+        	Feature firstFeature = chooseFeatureByType("booleans").get(0);
             //Ajoute le premier feature et la valeur YES aux critères des produits à choisir
-            productsChoice.put(chooseFeatureByType("booleans").get(0), "Yes");
+            productsChoice.put(firstFeature, "Yes");
         }
         else{
             if(!chooseFeatureByType("numbers").isEmpty()){
+            	Feature firstFeature = chooseFeatureByType("numbers").get(0);
+                FiltreVisitor filter = new FiltreVisitor();
+                List<Cell> cellData = filter.filtreReduit(pcm).get(firstFeature.getName()).get("numbers");
+                //Cast des valeur en float
+            	List<Float> newListe = new ArrayList<>();
+            	for(Cell cell: cellData){
+            		newListe.add(Float.parseFloat(cell.getContent()));
+            	}
+            	//Calcul de la moyenne
+            	float moyenne = (new MotifImpl()).moyenne(newListe);
+                
                 //Ajoute le premier feature et la valeur moyenne aux critères des produits à choisir
-                productsChoice.put(chooseFeatureByType("numbers").get(0), "200");
+                productsChoice.put(firstFeature, Float.toString(moyenne));
             }
             else{
                 if(!chooseFeatureByType("stringValues").isEmpty()){
-                    //Ajoute le premier feature et la valeur moyenne aux critères des produits à choisir
-                    productsChoice.put(chooseFeatureByType("stringValues").get(0), "YES");
+                	Feature firstFeature = chooseFeatureByType("stringValues").get(0);
+                	Motif motif = new MotifImpl();
+                    FiltreVisitor filter = new FiltreVisitor();
+                    List<Cell> cellData = filter.filtreReduit(pcm).get(firstFeature.getName()).get("stringValues");
+                    //Calcul des pourcentages d'apparition des valeurs des cellules
+                    Map<String, Float> pourcentages = motif.pourcentage(cellData);
+                    //Calcul du pourcentage maximal
+                    Float maxPourc = motif.max(pourcentages.values());
+                    
+                    //Recupère l'un des mots les plus representé
+                    String mustRepresented = "";
+                    for(String key: pourcentages.keySet()){
+                    	if(pourcentages.get(key) == maxPourc){
+                    		mustRepresented = key;
+                    	}
+                    }
+                	
+                    //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
+                    productsChoice.put(firstFeature, mustRepresented);
                 }
             }
         }
