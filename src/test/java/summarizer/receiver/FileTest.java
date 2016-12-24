@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package summarizer;
+package summarizer.receiver;
 
 import java.io.File;
 import java.util.ArrayList;
