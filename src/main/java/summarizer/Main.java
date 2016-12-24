@@ -35,6 +35,6 @@ public class Main {
     	ihm.chooseFeatures(receiver.getPCM());
     	ihm.chooseProducts(receiver.getPCM());
     	ihm.randomFeatureChoose();
-    	//ihm.jsonResume();
+    	ihm.jsonResume();
     }        
 }
