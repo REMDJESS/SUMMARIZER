@@ -153,25 +153,107 @@ public class Receiver {
             }
             else{
                 if(!chooseFeatureByType("stringValues").isEmpty()){
-                	Feature firstFeature = chooseFeatureByType("stringValues").get(0);
-                	Motif motif = new MotifImpl();
-                    FiltreVisitor filter = new FiltreVisitor();
-                    List<Cell> cellData = filter.filtreReduit(pcm).get(firstFeature.getName()).get("stringValues");
-                    //Calcul des pourcentages d'apparition des valeurs des cellules
-                    Map<String, Float> pourcentages = motif.pourcentage(cellData);
-                    //Calcul du pourcentage maximal
-                    Float maxPourc = motif.max(pourcentages.values());
-                    
-                    //Recupère l'un des mots les plus representé
-                    String mustRepresented = "";
-                    for(String key: pourcentages.keySet()){
-                    	if(pourcentages.get(key) == maxPourc){
-                    		mustRepresented = key;
-                    	}
-                    }
+                	Map<Feature, String> randomValues = stringTypeRandomChoose("stringValues");
+                	
+                	Feature firstFeature = null;
+                	String mustRepresented = null;
+                	for(Feature key: randomValues.keySet()){
+                		firstFeature = key;
+                		mustRepresented = randomValues.get(key);
+                	}
                 	
                     //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
                     productsChoice.put(firstFeature, mustRepresented);
+                }
+                else{
+                    if(!chooseFeatureByType("multiples").isEmpty()){
+                    	Map<Feature, String> randomValues = stringTypeRandomChoose("multiples");
+                    	
+                    	Feature firstFeature = null;
+                    	String mustRepresented = null;
+                    	for(Feature key: randomValues.keySet()){
+                    		firstFeature = key;
+                    		mustRepresented = randomValues.get(key);
+                    	}
+                    	
+                        //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
+                        productsChoice.put(firstFeature, mustRepresented);
+                    }
+                    else{
+                        if(!chooseFeatureByType("conditionals").isEmpty()){
+                        	Map<Feature, String> randomValues = stringTypeRandomChoose("conditionals");
+                        	
+                        	Feature firstFeature = null;
+                        	String mustRepresented = null;
+                        	for(Feature key: randomValues.keySet()){
+                        		firstFeature = key;
+                        		mustRepresented = randomValues.get(key);
+                        	}
+                        	
+                            //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
+                            productsChoice.put(firstFeature, mustRepresented);
+                        }
+                        else{
+                            if(!chooseFeatureByType("dateValues").isEmpty()){
+                            	Map<Feature, String> randomValues = stringTypeRandomChoose("dateValues");
+                            	
+                            	Feature firstFeature = null;
+                            	String mustRepresented = null;
+                            	for(Feature key: randomValues.keySet()){
+                            		firstFeature = key;
+                            		mustRepresented = randomValues.get(key);
+                            	}
+                            	
+                                //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
+                                productsChoice.put(firstFeature, mustRepresented);
+                            }
+                            else{
+                                if(!chooseFeatureByType("dimensions").isEmpty()){
+                                	Map<Feature, String> randomValues = stringTypeRandomChoose("dimensions");
+                                	
+                                	Feature firstFeature = null;
+                                	String mustRepresented = null;
+                                	for(Feature key: randomValues.keySet()){
+                                		firstFeature = key;
+                                		mustRepresented = randomValues.get(key);
+                                	}
+                                	
+                                    //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
+                                    productsChoice.put(firstFeature, mustRepresented);
+                                }
+                                else{
+                                    if(!chooseFeatureByType("notApplicables").isEmpty()){
+                                    	Map<Feature, String> randomValues = stringTypeRandomChoose("notApplicables");
+                                    	
+                                    	Feature firstFeature = null;
+                                    	String mustRepresented = null;
+                                    	for(Feature key: randomValues.keySet()){
+                                    		firstFeature = key;
+                                    		mustRepresented = randomValues.get(key);
+                                    	}
+                                    	
+                                        //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
+                                        productsChoice.put(firstFeature, mustRepresented);
+                                    }
+                                    else{
+                                        if(!chooseFeatureByType("partials").isEmpty()){
+                                        	Map<Feature, String> randomValues = stringTypeRandomChoose("partials");
+                                        	
+                                        	Feature firstFeature = null;
+                                        	String mustRepresented = null;
+                                        	for(Feature key: randomValues.keySet()){
+                                        		firstFeature = key;
+                                        		mustRepresented = randomValues.get(key);
+                                        	}
+                                        	
+                                            //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
+                                            productsChoice.put(firstFeature, mustRepresented);
+                                        }
+                                    }                                           
+                                }                                  
+                            }  
+                        }  
+                    }
                 }
             }
         }
@@ -200,6 +282,39 @@ public class Receiver {
         }
 		
 		return listOfChoosedFeature;		
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 */
+	private Map<Feature, String> stringTypeRandomChoose(String type){
+    	Feature firstFeature = chooseFeatureByType("stringValues").get(0);
+    	Motif motif = new MotifImpl();
+        FiltreVisitor filter = new FiltreVisitor();
+        List<Cell> cellData = filter.filtreReduit(pcm).get(firstFeature.getName()).get("stringValues");
+        //Cast des valeur en String
+    	List<String> newListe = new ArrayList<>();
+    	for(Cell cell: cellData){
+    		newListe.add(cell.getContent());
+    	}
+        //Calcul des pourcentages d'apparition des valeurs des cellules
+        Map<String, Float> pourcentages = motif.pourcentage(newListe);
+        //Calcul du pourcentage maximal
+        Float maxPourc = motif.max(pourcentages.values());
+        
+        //Recupère l'un des mots les plus representé
+        String mustRepresented = "";
+        for(String key: pourcentages.keySet()){
+        	int comparateur = Float.compare(pourcentages.get(key), maxPourc);
+        	if(comparateur == 0){
+        		mustRepresented = key;
+        	}
+        }
+        
+        Map<Feature, String> retour = new HashMap<>();
+        retour.put(firstFeature, mustRepresented);
+        return retour;
 	}
 	
 }
