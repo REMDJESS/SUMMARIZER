@@ -94,10 +94,6 @@ public class Receiver {
 				pcm.removeProduct(produit);
 			}
 		}
-		////////////////////////////
-//		System.out.println("/*************  Apres ***********/");
-//		System.out.println(pcm);
-		//////////////////////////
 	}
 	
 	/**
@@ -105,11 +101,6 @@ public class Receiver {
 	 * @throws IOException 
 	 */
 	public void jsonExport() throws IOException{
-		////////////////////////////
-//		System.out.println("/*************  Avant export ***********/");
-//		System.out.println(pcm);
-		//////////////////////////
-		
         //Filtre
         FiltreVisitor filter = new FiltreVisitor();
         HashMap<String, HashMap<String, List<Cell>>> dataFiltered = filter.filtreReduit(pcm);
