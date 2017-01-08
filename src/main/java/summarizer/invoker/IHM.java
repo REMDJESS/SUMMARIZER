@@ -56,6 +56,9 @@ public class IHM {
     		System.out.println("Please enter the path to your file (ex: pcms/example.pcm) : ");
             String fichier = sc.nextLine();
             pcmFile = new File(fichier);
+            if(!pcmFile.exists()){
+            	System.out.println("file not found.");
+            }
         }
         while(!pcmFile.exists());
         invoke("definePCM");
@@ -78,7 +81,7 @@ public class IHM {
 	}
 	
 	/**
-	 * Demande à l'utilisateur s'il veut choisir des features particulier
+	 * Demande à l'utilisateur s'il veut choisir des features particuliers
 	 * si oui, il lui recupère la liste des features de l'utilisateur
 	 * 
 	 * @param pcm PCM dans lequel se ferra le choix
@@ -178,20 +181,23 @@ public class IHM {
             while(!test);   
             
             //Recupérer la valeur choisie du feauture
-            Boolean testValuePresent = false;
+            Boolean testValuePresence = false;
             do{
                 System.out.println("Please enter your value and validate.");
                 String featValue = sc.nextLine();
                 
+                //Vérifier l'existence de la valeur parmi celles du feature
                 if(findValueInFeature(feature, featValue)){
-                	testValuePresent = true;
+                	testValuePresence = true;
                     this.userProductsChoice.put(feature, featValue);
                 }
                 else{
                 	System.out.println("Value not present.");
                 }
             }
-            while(!testValuePresent);
+            while(!testValuePresence);
+            
+            
             
             invoke("trierProduit");
         }
@@ -261,5 +267,5 @@ public class IHM {
 		}
 		return test;
 	}
-	
+		
 }
