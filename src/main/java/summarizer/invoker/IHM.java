@@ -10,9 +10,11 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.opencompare.api.java.Cell;
 import org.opencompare.api.java.Feature;
 import org.opencompare.api.java.PCM;
 
+import summarizer.Operateur;
 import summarizer.command.Command;
 
 public class IHM {
@@ -23,6 +25,7 @@ public class IHM {
 	private Map<String, Command> commandsList;
 	private List<Integer> userListFeatures;
 	private Map<Feature, String> userProductsChoice;
+	private Operateur operateur;
 	
 	/**
 	 * Constructeur
@@ -49,10 +52,12 @@ public class IHM {
 	 * @throws IOException
 	 */
 	public void setPCMFile() throws IOException{
-        System.out.println("Veuillez saisir le chemin d'acces a votre fichier (ex: pcms/example.pcm) : ");
-        String fichier = sc.nextLine();
-        pcmFile = new File(fichier);
-
+        do{
+    		System.out.println("Please enter the path to your file (ex: pcms/example.pcm) : ");
+            String fichier = sc.nextLine();
+            pcmFile = new File(fichier);
+        }
+        while(!pcmFile.exists());
         invoke("definePCM");
 	}
 	
@@ -74,21 +79,21 @@ public class IHM {
 	
 	/**
 	 * Demande à l'utilisateur s'il veut choisir des features particulier
-	 * si oui, il lui recupère la liste des feature de l'utilisateur
+	 * si oui, il lui recupère la liste des features de l'utilisateur
 	 * 
 	 * @param pcm PCM dans lequel se ferra le choix
 	 */
 	public void chooseFeatures(PCM pcm){
         String userChoice;
         do{
-            System.out.println("Avez-vous des choix de features particuliers ? (O/N) ");
+            System.out.println("Do you have any particular feature choices ? (Y/N) ");
             userChoice = sc.nextLine();
         }
-        while(!userChoice.equals("O") && !userChoice.equals("o") && !userChoice.equals("N") && !userChoice.equals("n"));
+        while(!userChoice.equals("Y") && !userChoice.equals("y") && !userChoice.equals("N") && !userChoice.equals("n"));
         
-        if(userChoice.equals("O") || userChoice.equals("o")){
+        if(userChoice.equals("Y") || userChoice.equals("y")){
             //Afficher la liste des features
-            System.out.println("Liste des features");
+            System.out.println("List of features");
             HashMap<Integer, Feature> listeFeatures = new HashMap<>();
             int featCpt = 0;
             for (Feature feature : pcm.getConcreteFeatures()) {
@@ -98,8 +103,8 @@ public class IHM {
             }
             
             //Recupérer le choix de l'utilisateur
-            System.out.println("Veuillez saisir le numero du feature choisie puis validez pour en choisir un autre.");
-            System.out.println("Terminer en saisissant une lettre.");
+            System.out.println("Please enter the number of the selected feature and validate to choose another one.");
+            System.out.println("Finish by entering a letter.");
             List<Integer> listeDesChoix = new ArrayList<>();
             Pattern pattern = Pattern.compile("[0-9]");
             Boolean test = null;
@@ -113,7 +118,7 @@ public class IHM {
 	            		listeDesChoix.add(userChoiceInt);
             		}
             		else{
-            			System.out.println("Veuillez choisir un nombre de la liste !");
+            			System.out.println("Please choose a number from the list.");
             		}
             	}
             }
@@ -131,14 +136,14 @@ public class IHM {
 	public void chooseProducts(PCM pcm){
         String userChoice;
         do{
-            System.out.println("Voulez vous une valeur de features particulières ? (O/N) ");
+            System.out.println("Do you want a particular feature value ? (Y/N) ");
             userChoice = sc.nextLine();
         }
-        while(!userChoice.equals("O") && !userChoice.equals("o") && !userChoice.equals("N") && !userChoice.equals("n"));
+        while(!userChoice.equals("Y") && !userChoice.equals("y") && !userChoice.equals("N") && !userChoice.equals("n"));
 
-        if(userChoice.equals("O") || userChoice.equals("o")){
+        if(userChoice.equals("Y") || userChoice.equals("y")){
             //Afficher la liste des features
-            System.out.println("Liste des features");
+            System.out.println("List of features");
             HashMap<Integer, Feature> listeFeatures = new HashMap<>();
             int featCpt = 0;
             for (Feature feature : pcm.getConcreteFeatures()) {
@@ -148,7 +153,7 @@ public class IHM {
             }
             
             //Recupérer le choix du feature
-            System.out.println("Veuillez saisir le numero du feature choisie puis validez.");
+            System.out.println("Please enter the number of the selected feature and validate.");
             Feature feature = null;
             Pattern pattern = Pattern.compile("[0-9]");
             Boolean test = null;
@@ -163,20 +168,31 @@ public class IHM {
                 		feature = listeFeatures.get(userChoiceInt);
                 	}
             		else{
-            			System.out.println("Veuillez choisir un nombre de la liste !");
+            			System.out.println("Please choose a number from the list.");
             		}            		
             	}
             	else{
-            		System.out.println("Veuillez saisir un nombre !");
+            		System.out.println("Please choose a number.");
             	}
             }
             while(!test);   
             
             //Recupérer la valeur choisie du feauture
-            System.out.println("Veuillez saisir votre valeur puis validez.");
-            String featValue = sc.nextLine();
+            Boolean testValuePresent = false;
+            do{
+                System.out.println("Please enter your value and validate.");
+                String featValue = sc.nextLine();
+                
+                if(findValueInFeature(feature, featValue)){
+                	testValuePresent = true;
+                    this.userProductsChoice.put(feature, featValue);
+                }
+                else{
+                	System.out.println("Value not present.");
+                }
+            }
+            while(!testValuePresent);
             
-            this.userProductsChoice.put(feature, featValue);
             invoke("trierProduit");
         }
 		
@@ -197,8 +213,8 @@ public class IHM {
 	 */
 	public void jsonResume(){
 		invoke("jsonResume");
-        System.out.println("Resumé généré !");
-        System.out.println("Vous pourrez le visualiser en ouvrant le fichier à l'emplacement suivant:");
+        System.out.println("\nSummary generated !");
+        System.out.println("You can view it by opening the file in the following location:");
         System.out.println("src/main/java/IHM/public_html/index.html");		
 	}
 	
@@ -210,7 +226,7 @@ public class IHM {
 	 */
 	public void addCommand(String keyword, Command cmd) {
 		if ((keyword == null) || (cmd == null)) {
-			throw new IllegalArgumentException("Aucune commande spécifié.");
+			throw new IllegalArgumentException("No command specified.");
 		}
 		commandsList.put(keyword, cmd);
 	}
@@ -225,8 +241,25 @@ public class IHM {
 			commandsList.get(cmdName).execute();
 		}
 		else{
-			throw new IllegalArgumentException(cmdName + " n'est pas une commande valide");
+			throw new IllegalArgumentException(cmdName + " is not a valid command.");
 		}
+	}
+	
+	/**
+	 * Vérifie la présence d'une valeur dans un feature
+	 * @param feat
+	 * @param value
+	 * @return
+	 */
+	private boolean findValueInFeature(Feature feat, String value){
+		Boolean test = false;
+		for(Cell cell: feat.getCells()){
+			if(cell.getContent().equals(value)){
+				test = true;
+				break;
+			}
+		}
+		return test;
 	}
 	
 }
