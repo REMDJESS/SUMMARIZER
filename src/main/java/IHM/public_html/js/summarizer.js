@@ -1,5 +1,7 @@
 $(function () {
-    for (i = 0, l = summarizerData.features.length; i < l; i++) {
+    for (i = 2, l = summarizerData.features.length; i < l; i++) {
+        var choixFeature= summarizerData.features[0]
+        var choixValeur= summarizerData.features[1]
         var feature = summarizerData.features[i];
         var collapseHead = '';
         var collapseFoot = '';
@@ -21,6 +23,12 @@ $(function () {
         collapseFoot += '</div></div></div></div>';
 
         var types = feature.types;
+        var choixFeature=choixFeature.featureChoisi; 
+        var choixValeur=choixValeur.operateurChoisi; 
+        console.log(summarizerData.features.length);
+        console.log(choixFeature.featureChoisi);
+        console.log(choixValeur.operateurChoisi);
+        
         for (j = 0; j < types.length; j++) {
             var type = types[j].type;
             var resume = types[j].resume;
@@ -47,9 +55,13 @@ $(function () {
 
         collapse = collapseHead + collapseBody + collapseFoot;
         $("#accordion").append(collapse);
+       
     }
+    var data = "data"
+     $("#choix").append(" </span> Feature selected: <span class="+data+"> "+choixFeature+" </span> Value selected: <span class="+data+"> "+choixValeur);
 });
-
+//builder.append("{ \"featureChoisi\": \" ").append(featureChoisi).append("\"},");
+//        builder.append("{ \"operateurChoisi\": \" ").append(operateurChoisi).append("\"},");
 /**
  * 
  * @param resume

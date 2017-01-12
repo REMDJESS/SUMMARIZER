@@ -24,6 +24,8 @@ import org.opencompare.api.java.PCMContainer;
 import org.opencompare.api.java.Product;
 import org.opencompare.api.java.impl.io.KMFJSONLoader;
 
+import summarizer.Operateur;
+
 /**
  *
  * @author usuario
@@ -158,7 +160,7 @@ public class ReceiverTest {
         
         /*********** résultat ******************/
         myReceiver.setPCM(newPcmFile);
-        myReceiver.reduceProduct(choix);
+        myReceiver.reduceProduct(choix, Operateur.EQUAL);
         PCM result = myReceiver.getPCM();
           
         assertEquals(expResult, result);

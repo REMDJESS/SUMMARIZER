@@ -38,8 +38,8 @@ public class JsonExport {
      * @param resumeFile Fichier cible pour la sauvegarde des données
      * @throws IOException 
      */
-    public void export(HashMap<String, HashMap<String, List<Cell>>> listeFeatures, File resumeFile) throws IOException{
-        String dataFormated = toJson(listeFeatures);
+    public void export(HashMap<String, HashMap<String, List<Cell>>> listeFeatures, File resumeFile, String featureChoisi, String operateurChoisi) throws IOException{
+        String dataFormated = toJson(listeFeatures, featureChoisi, operateurChoisi);
         saveTo(dataFormated, resumeFile);
     }
     
@@ -49,12 +49,14 @@ public class JsonExport {
      * @param listeFeatures HashMap contenant une liste de features
      * @return Chaine de caractère au format Json
      */
-    public String toJson(HashMap<String, HashMap<String, List<Cell>>> listeFeatures){
+    public String toJson(HashMap<String, HashMap<String, List<Cell>>> listeFeatures, String featureChoisi, String operateurChoisi){
     	//Déclaration d'une variable JavaScript pour la éutilisation des données
     	builder.append("var summarizerData = ");
     	
     	//Définition des données
         builder.append("{ \"features\": [ ");
+        builder.append("{ \"featureChoisi\": \" ").append(featureChoisi).append("\"},");
+        builder.append("{ \"operateurChoisi\": \" ").append(operateurChoisi).append("\"},");
         for(String key: listeFeatures.keySet()){
             String nomFeature = key;
             HashMap<String, List<Cell>> listeFeatureCells = listeFeatures.get(key);

@@ -18,7 +18,7 @@ public class TrierProduitCommand implements Command {
 	
 	@Override
 	public void execute() {
-		receiver.reduceProduct(ihm.getUserProductsChoice());
+		receiver.reduceProduct(ihm.getUserProductsChoice(), ihm.getOperateur());
 	}
 
 }

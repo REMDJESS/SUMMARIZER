@@ -124,16 +124,18 @@ public class FiltreVisitor implements PCMVisitor {
             }
         }
     }
-
+    
     @Override
     public void visit(PCM pcm) {
         //Nouvelle collection
         listeFeatures = new HashMap<>();
         
+        //Parcours par feature
 //        for (Feature feature: pcm.getConcreteFeatures()) {
 //            feature.accept(this);
 //        }
         
+        //Parcours par produit
         for(Product produit: pcm.getProducts()){
         	produit.accept(this);
         }
