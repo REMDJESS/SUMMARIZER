@@ -16,6 +16,7 @@ import org.opencompare.api.java.PCM;
 
 import summarizer.Operateur;
 import summarizer.command.Command;
+import summarizer.receiver.TypeFeatureVisitor;
 
 public class IHM {
 	
@@ -81,6 +82,14 @@ public class IHM {
 	}
 	
 	/**
+	 * 
+	 * @return
+	 */
+	public Operateur getOperateur(){
+		return operateur;
+	}
+	
+	/**
 	 * Demande à l'utilisateur s'il veut choisir des features particuliers
 	 * si oui, il lui recupère la liste des features de l'utilisateur
 	 * 
@@ -107,7 +116,7 @@ public class IHM {
             
             //Recupérer le choix de l'utilisateur
             System.out.println("Please enter the number of the selected feature and validate to choose another one.");
-            System.out.println("Finish by entering a letter.");
+            System.out.println("Finish your choices by entering a letter.");
             List<Integer> listeDesChoix = new ArrayList<>();
             Pattern pattern = Pattern.compile("[0-9]");
             Boolean test = null;
@@ -178,26 +187,77 @@ public class IHM {
             		System.out.println("Please choose a number.");
             	}
             }
-            while(!test);   
+            while(!test);
+            
+            //Affiche les valeurs du feature
+            System.out.println("Values of the feature:");
+            HashMap<Integer, String> listCellValue = new HashMap<>();
+            HashMap<Integer, Cell> listCell = new HashMap<>();
+            int cptCellValue = 0;
+            for(Cell cell: feature.getCells()){
+            	if(!listCellValue.values().contains(cell.getContent())){
+                	cptCellValue++;
+            		listCellValue.put(cptCellValue, cell.getContent()); //Pour la vérification
+            		listCell.put(cptCellValue, cell);
+                	System.out.println(cptCellValue + ")" + cell.getContent());
+            	}            	
+            }
             
             //Recupérer la valeur choisie du feauture
             Boolean testValuePresence = false;
+            String featValue;
             do{
-                System.out.println("Please enter your value and validate.");
-                String featValue = sc.nextLine();
+                System.out.println("Please choose a number of value from the list.");
+                featValue = sc.nextLine();
                 
-                //Vérifier l'existence de la valeur parmi celles du feature
-                if(findValueInFeature(feature, featValue)){
-                	testValuePresence = true;
-                    this.userProductsChoice.put(feature, featValue);
-                }
+            	Matcher matcher = pattern.matcher(userChoice);
+            	test = matcher.find();
+            	if(test){
+                	testValuePresence = listCellValue.containsKey(Integer.parseInt(featValue));
+                	if(testValuePresence){
+                        this.userProductsChoice.put(listCell.get(Integer.parseInt(featValue)).getFeature(), listCellValue.get(Integer.parseInt(featValue)));
+                    }
+                    else{
+                    	System.out.println("Choose a number from the list.");
+                    }       
+            	}
                 else{
-                	System.out.println("Value not present.");
-                }
+                	System.out.println("Please choose a number.");
+                }       
             }
             while(!testValuePresence);
             
+            //Gestion de l'opérateur de comparaison
+            System.out.println("List of operator:");
+            int cptOperateur = 0;
+            HashMap<Integer, Operateur> listOp = new HashMap<>();
+            for(Operateur op: Operateur.values()){
+            	cptOperateur++;
+            	listOp.put(cptOperateur, op);
+            	System.out.println(cptOperateur + ")" +op.toString());
+            }
             
+            Boolean testChoixOperateur = false;
+            do{
+                System.out.println("Please choose a number of operator from the list.");
+                userChoice = sc.nextLine();
+                
+            	Matcher matcher = pattern.matcher(userChoice);
+            	test = matcher.find();
+            	if(test){
+            		testChoixOperateur = listOp.keySet().contains(Integer.parseInt(userChoice));
+            		if(testChoixOperateur){
+                		operateur = listOp.get(Integer.parseInt(userChoice));
+            		}
+                    else{
+                    	System.out.println("Choose a number from the list.");
+                    }
+            	}
+                else{
+                	System.out.println("Please choose a number.");
+                }       
+            }
+            while(!testChoixOperateur);            
             
             invoke("trierProduit");
         }
@@ -249,23 +309,6 @@ public class IHM {
 		else{
 			throw new IllegalArgumentException(cmdName + " is not a valid command.");
 		}
-	}
-	
-	/**
-	 * Vérifie la présence d'une valeur dans un feature
-	 * @param feat
-	 * @param value
-	 * @return
-	 */
-	private boolean findValueInFeature(Feature feat, String value){
-		Boolean test = false;
-		for(Cell cell: feat.getCells()){
-			if(cell.getContent().equals(value)){
-				test = true;
-				break;
-			}
-		}
-		return test;
 	}
 		
 }
