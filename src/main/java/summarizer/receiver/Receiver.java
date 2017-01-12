@@ -16,9 +16,13 @@ import org.opencompare.api.java.Product;
 import org.opencompare.api.java.impl.io.KMFJSONLoader;
 import org.opencompare.api.java.io.PCMLoader;
 
+import summarizer.Operateur;
+
 public class Receiver {
 	
 	PCM pcm;
+	String featureChoisi = "";
+	String operateurChoisi = "";
 	
 	public Receiver(){
 		this.pcm = null;
@@ -72,21 +76,79 @@ public class Receiver {
 
 	/**
 	 * Reduit la liste des produits du PCM sur la base du choix des valeurs
-	 * particulières de certains features
+	 * particulières de certains features et de l'opérateur (selon le type du feature)
 	 * 
 	 *  @param choix Liste des features et leurs valeurs particulières
 	 */
-	public void reduceProduct(Map<Feature, String> choix){
+	public void reduceProduct(Map<Feature, String> choix, Operateur operateur){
+		TypeFeatureVisitor typeVisitor = new TypeFeatureVisitor();
+		String typeFeature = "";
 		List<Product> productsListe = pcm.getProducts();
+		
 		for(Product produit: productsListe){
 			Boolean test = true;
 			for(Feature feature: choix.keySet()){
 				Cell cellule = produit.findCell(feature);
-				if(choix.get(feature).equals(cellule.getContent())){
-					test = test && true;
-				}
-				else{
-					test = test && false;
+				typeFeature = typeVisitor.getType(feature);
+				
+				//Recupération des éléments choisi pour la présentation
+				featureChoisi = feature.getName();
+				operateurChoisi = operateur.toString();
+				
+				switch(operateur.toString()){
+					case "upper":
+						if(typeFeature.equals("Number")){
+							test = (Integer.parseInt(choix.get(feature)) > Integer.parseInt(cellule.getContent())) ? (test && true) : (test && false);
+						}
+						else{
+							test = (choix.get(feature).equals(cellule.getContent())) ? (test && true) : (test && false);
+						}
+					break;
+						
+					case "lower":
+						if(typeFeature.equals("Number")){
+							test = (Integer.parseInt(choix.get(feature)) < Integer.parseInt(cellule.getContent())) ? (test && true) : (test && false);
+						}
+						else{
+							test = (choix.get(feature).equals(cellule.getContent())) ? (test && true) : (test && false);
+						}
+					break;
+						
+					case "equal":
+						if(typeFeature.equals("Number")){
+							test = (Integer.parseInt(choix.get(feature)) == Integer.parseInt(cellule.getContent())) ? (test && true) : (test && false);
+						}
+						else{
+							test = (choix.get(feature).equals(cellule.getContent())) ? (test && true) : (test && false);
+						}
+					break;
+
+					case "upper or equal":
+						if(typeFeature.equals("Number")){
+							test = (Integer.parseInt(choix.get(feature)) >= Integer.parseInt(cellule.getContent())) ? (test && true) : (test && false);
+						}
+						else{
+							test = (choix.get(feature).equals(cellule.getContent())) ? (test && true) : (test && false);
+						}
+					break;
+						
+					case "lower or equal":
+						if(typeFeature.equals("Number")){
+							test = (Integer.parseInt(choix.get(feature)) <= Integer.parseInt(cellule.getContent())) ? (test && true) : (test && false);
+						}
+						else{
+							test = (choix.get(feature).equals(cellule.getContent())) ? (test && true) : (test && false);
+						}
+					break;
+
+					case "different":
+						if(typeFeature.equals("Number")){
+							test = (Integer.parseInt(choix.get(feature)) != Integer.parseInt(cellule.getContent())) ? (test && true) : (test && false);
+						}
+						else{
+							test = (!choix.get(feature).equals(cellule.getContent())) ? (test && true) : (test && false);
+						}
+					break;
 				}
 			}
 			
@@ -108,7 +170,7 @@ public class Receiver {
         // Export
         File resumeFile = new File("src/main/java/IHM/public_html/json/summarizer.js"); //fichier cible
         JsonExport exporter = new JsonExport();
-        exporter.export(dataFiltered, resumeFile);		
+        exporter.export(dataFiltered, resumeFile, featureChoisi, operateurChoisi);		
 	}
 		
 	/**
@@ -120,11 +182,13 @@ public class Receiver {
 	 */
 	public void randomChoose(){
         Map<Feature, String> productsChoice = new HashMap<>();
+        Operateur operateur = Operateur.EQUAL;
         
         if(!chooseFeatureByType("booleans").isEmpty()){
         	Feature firstFeature = chooseFeatureByType("booleans").get(0);
             //Ajoute le premier feature et la valeur YES aux critères des produits à choisir
             productsChoice.put(firstFeature, "Yes");
+            operateur = Operateur.EQUAL;
         }
         else{
             if(!chooseFeatureByType("numbers").isEmpty()){
@@ -141,6 +205,7 @@ public class Receiver {
                 
                 //Ajoute le premier feature et la valeur moyenne aux critères des produits à choisir
                 productsChoice.put(firstFeature, Float.toString(moyenne));
+                operateur = Operateur.SUP_EQUAL;
             }
             else{
                 if(!chooseFeatureByType("stringValues").isEmpty()){
@@ -155,6 +220,7 @@ public class Receiver {
                 	
                     //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
                     productsChoice.put(firstFeature, mustRepresented);
+                    operateur = Operateur.EQUAL;
                 }
                 else{
                     if(!chooseFeatureByType("multiples").isEmpty()){
@@ -169,6 +235,7 @@ public class Receiver {
                     	
                         //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
                         productsChoice.put(firstFeature, mustRepresented);
+                        operateur = Operateur.EQUAL;
                     }
                     else{
                         if(!chooseFeatureByType("conditionals").isEmpty()){
@@ -183,6 +250,7 @@ public class Receiver {
                         	
                             //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
                             productsChoice.put(firstFeature, mustRepresented);
+                            operateur = Operateur.EQUAL;
                         }
                         else{
                             if(!chooseFeatureByType("dateValues").isEmpty()){
@@ -197,6 +265,7 @@ public class Receiver {
                             	
                                 //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
                                 productsChoice.put(firstFeature, mustRepresented);
+                                operateur = Operateur.EQUAL;
                             }
                             else{
                                 if(!chooseFeatureByType("dimensions").isEmpty()){
@@ -211,6 +280,7 @@ public class Receiver {
                                 	
                                     //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
                                     productsChoice.put(firstFeature, mustRepresented);
+                                    operateur = Operateur.EQUAL;
                                 }
                                 else{
                                     if(!chooseFeatureByType("notApplicables").isEmpty()){
@@ -225,6 +295,7 @@ public class Receiver {
                                     	
                                         //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
                                         productsChoice.put(firstFeature, mustRepresented);
+                                        operateur = Operateur.EQUAL;
                                     }
                                     else{
                                         if(!chooseFeatureByType("partials").isEmpty()){
@@ -239,6 +310,7 @@ public class Receiver {
                                         	
                                             //Ajoute le premier feature et l'un des valeur les plus représentées aux critères des produits à choisir
                                             productsChoice.put(firstFeature, mustRepresented);
+                                            operateur = Operateur.EQUAL;
                                         }
                                     }                                           
                                 }                                  
@@ -249,7 +321,7 @@ public class Receiver {
             }
         }
         
-        reduceProduct(productsChoice);		
+        reduceProduct(productsChoice, operateur);		
 	}
 	
 	/**
